@@ -12,14 +12,14 @@
  	<!-- Open Graph (Discord, Facebook, etc.) --> 
  	<meta property="og:title" content="NeyRon"> 
  	<meta property="og:description" content="15 y/o developer, photographer and video editor from Russia. I create Roblox games and web projects."> 
- 	<meta property="og:image" content="/bg.png"> 
+ 	<meta property="og:image" content="/public/bg.png"> 
  	<meta property="og:type" content="website"> 
  	
  	<!-- Twitter Card --> 
  	<meta name="twitter:card" content="summary_large_image"> 
  	<meta name="twitter:title" content="NeyRon"> 
  	<meta name="twitter:description" content="15 y/o developer, photographer and video editor from Russia. I create Roblox games and web projects."> 
- 	<meta name="twitter:image" content="/bg.png"> 
+ 	<meta name="twitter:image" content="/public/bg.png"> 
 
  	<!-- Tailwind CSS --> 
  	<script src="3.4.17"></script> 
@@ -51,7 +51,7 @@
  			z-index: -1; 
  			background-size: cover; 
  			background-position: center; 
- 			background-image: url('/bg.png'); 
+ 			background-image: url('/public/bg.png'); 
  			filter: blur(24px) brightness(0.6); 
  			transform: scale(1.1); 
  			transition: transform 0.2s linear; 
@@ -318,10 +318,10 @@
  	
  	<!-- Character Image (ty svit) --> 
  	<a href="https://t.me/d1np1" target="_blank" rel="noopener noreferrer" class="character-image hidden lg:block absolute top-1/2 -translate-y-1/2 left-[calc(50%+28rem)] w-48 z-20"> 
- 		<img src="char.png" alt="Character Art" class="w-full h-auto" onerror="this.onerror=null; this.src='https://placehold.co/192x286/1a1a1a/ffffff?text=Art';"> 
+ 		<img src="/public/char.png" alt="Character Art" class="w-full h-auto" onerror="this.onerror=null; this.src='https://placehold.co/192x286/1a1a1a/ffffff?text=Art';"> 
  	</a> 
  	<a href="https://t.me/d1np1" target="_blank" rel="noopener noreferrer" class="character-image lg:hidden fixed bottom-4 right-4 w-28 z-40"> 
- 		<img src="char.png" alt="Character Art" class="w-full h-auto" onerror="this.onerror=null; this.src='https://placehold.co/112x168/1a1a1a/ffffff?text=Art';"> 
+ 		<img src="/public/char.png" alt="Character Art" class="w-full h-auto" onerror="this.onerror=null; this.src='https://placehold.co/112x168/1a1a1a/ffffff?text=Art';"> 
  	</a> 
  	<!-- End Character Image --> 
 
@@ -342,7 +342,7 @@
  			<main class="relative flex-grow overflow-x-hidden" style="height: 609px;"> 
  				<section id="home" class="content-section p-8 slide-active"> 
  					<div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-8"> 
- 						<img id="pfp" src="neyron.png" alt="pfp" class="w-32 h-32 rounded-full border-2 border-white/20 object-cover shadow-lg shrink-0 transition-all duration-500 ease-out" onerror="this.onerror=null; this.src='https://placehold.co/128x128/1a1a1a/ffffff?text=User';"> 
+ 						<img id="pfp" src="/public/neyron.png" alt="pfp" class="w-32 h-32 rounded-full border-2 border-white/20 object-cover shadow-lg shrink-0 transition-all duration-500 ease-out" onerror="this.onerror=null; this.src='https://placehold.co/128x128/1a1a1a/ffffff?text=User';"> 
  						<div class="flex-grow flex flex-col sm:flex-row justify-between items-center sm:items-start w-full"> 
  							<div id="bio" class="text-center sm:text-left transition-all duration-500 ease-out delay-100"> 
  								<h2 class="text-2xl font-bold text-white" data-translate-key="bio.name">нейрон</h2> 
@@ -357,7 +357,7 @@
  								<div id="badges" class="flex flex-wrap gap-2 justify-center sm:justify-start"> 
  									<div class="flex items-center space-x-1.5 bg-orange-400/10 border border-orange-400/20 rounded-md px-2 py-1 delay-[450ms]"> 
  										<div class="w-4 h-4 rounded overflow-hidden shrink-0"> 
- 											<img src="neyron.png" class="w-full h-full object-cover" alt="Roblox Developer"> 
+ 											<img src="/public/pfp.png" class="w-full h-full object-cover" alt="Roblox Developer"> 
  										</div> 
  										<span class="text-xs font-semibold text-orange-300">Roblox Developer</span> 
  									</div> 
@@ -441,7 +441,7 @@
  			<canvas id="visualizer-canvas" width="894" height="78"></canvas> 
  			<!-- Audio element --> 
  			<audio id="audio-player" controls preload="metadata">
-      <source src="music.mp3" type="audio/mpeg">
+      <source src="/public/music.mp3" type="audio/mpeg">
         Ваш браузер не поддерживает аудио.
     </audio>
  			
@@ -546,7 +546,7 @@
  			
  			// --- Playlist Configuration --- 
  			  const playlist = [ 
- 				   { title: "так по***", artist: "madk1d", src: "music.mp3", link: "https://soundcloud.com/madk1d9/tak-po" }, 
+ 				   { title: "Young Black Rich", artist: "Melly Mike", src: "/public/music.mp3", link: "https://soundcloud.com/mellymike/young-black-rich" }, 
  				]; 
  			
  			let currentTrackIndex = 0; 
