@@ -1064,15 +1064,35 @@
  					requestAnimationFrame(updateMainHeight); 
  					
  					// Attempt to autoplay 
- 					togglePlay(); 
- 				}, 100); 
- 			} 
-            
- 			init(); 
- 		}); 
+function togglePlay() {
+    setupAudioContext();
+    
+    if (isPlaying || ctx.state === 'suspended') {
+        aud.pause();
+        isPlaying = false;
+        ppBtn.innerHTML = feather.icons.play.toSvg({ class: 'w-6 h-6' });
+        return;
+    }
+
+    const playPromise = aud.play();
+    
+    if (playPromise !== undefined) {
+        playPromise.then(() => {
+            isPlaying = true;
+            ppBtn.innerHTML = feather.icons.pause.toSvg({ class: 'w-6 h-6' });
+            animationLoop();
+        }).catch(e => {
+            console.error("Ошибка воспроизведения:", e);
+            isPlaying = false;
+
+            ppBtn.innerHTML = feather.icons.play.toSvg({ class: 'w-6 h-6' });
+        });
+    }
+}
  	</script> 
   
  
 
 </body></html>
+
 
