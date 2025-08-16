@@ -1,1100 +1,1190 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
- 	<meta charset="UTF-8"> 
- 	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
- 	<title>NeyRon</title> 
- 	
- 	<!-- Embed/Social Sharing Tags --> 
- 	<meta name="description" content="15 y/o developer, photographer and video editor from Russia. I create Roblox games and web projects."> 
- 	<meta name="theme-color" content="#000000"> 
-
- 	<!-- Open Graph (Discord, Facebook, etc.) --> 
- 	<meta property="og:title" content="NeyRon"> 
- 	<meta property="og:description" content="15 y/o developer, photographer and video editor from Russia. I create Roblox games and web projects."> 
- 	<meta property="og:image" content="public/bg.png"> 
- 	<meta property="og:type" content="website"> 
- 	
- 	<!-- Twitter Card --> 
- 	<meta name="twitter:card" content="summary_large_image"> 
- 	<meta name="twitter:title" content="NeyRon"> 
- 	<meta name="twitter:description" content="15 y/o developer, photographer and video editor from Russia. I create Roblox games and web projects."> 
- 	<meta name="twitter:image" content="public/bg.png"> 
-
- 	<!-- Tailwind CSS --> 
- 	<script src="3.4.17"></script> 
- 	
- 	<!-- Google Fonts: Inter --> 
- 	<link rel="preconnect" href="https://fonts.googleapis.com/"> 
- 	<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin=""> 
- 	<link href="css2.css" rel="stylesheet"> 
-
- 	<!-- Feather Icons --> 
- 	<script src="feather.min.js"></script> 
- 	
- 	<!-- Vanilla Tilt JS --> 
- 	<script type="text/javascript" src="vanilla-tilt.min.js"></script> 
-
- 	<style> 
- 		/* Base Styling */ 
- 		body { 
- 			font-family: 'Inter', sans-serif; 
- 		} 
-
- 		/* Background Container With Blurred Image */ 
- 		.background-container { 
- 			position: fixed; 
- 			top: 0; 
- 			left: 0; 
- 			width: 100%; 
- 			height: 100%; 
- 			z-index: -1; 
- 			background-size: cover; 
- 			background-position: center; 
- 			background-image: url('public/bg.png'); 
- 			filter: blur(24px) brightness(0.6); 
- 			transform: scale(1.1); 
- 			transition: transform 0.2s linear; 
- 		} 
-
- 		/* Custom Active States For Navigation */ 
- 		.nav-link.active { 
- 			background-color: rgba(255, 255, 255, 0.1); 
- 			color: #fff; 
- 		} 
- 		
- 		.sub-nav-link.active { 
- 			 background-color: rgba(255, 255, 255, 0.2); 
- 			 border-color: rgba(255, 255, 255, 0.7); 
- 		} 
-
- 		/* Styles For Tab Transitions */ 
- 		.content-section, .portfolio-content { 
- 			transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s; 
- 			position: absolute; 
- 			width: 100%; 
- 			top: 0; 
- 			left: 0; 
- 		} 
- 		
- 		/* State Classes For Sgliding Panels */ 
- 		.slide-active { 
- 			transform: translateX(0); 
- 			opacity: 1; 
- 			pointer-events: auto; 
- 			z-index: 10; 
- 		} 
- 		.slide-off-left { 
- 			transform: translateX(-100%); 
- 			opacity: 0; 
- 			pointer-events: none; 
- 		} 
- 		.slide-off-right { 
- 			transform: translateX(100%); 
- 			opacity: 0; 
- 			pointer-events: none; 
- 		} 
- 		
- 		/* --- Tooltip Styles --- */ 
- 		.tooltip { 
- 			position: fixed; 
- 			z-index: 100; 
- 			opacity: 0; 
- 			pointer-events: none; 
- 			transition: opacity 0.2s ease, transform 0.2s ease; 
- 			background-color: rgba(20, 20, 20, 0.85); 
- 			backdrop-filter: blur(4px); 
- 			color: #e5e7eb; 
- 			border-radius: 0.5rem; 
- 			border: 1px solid rgba(255, 255, 255, 0.1); 
- 			box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); 
- 			padding: 0; 
- 		} 
- 		#flag-tooltip { 
- 			width: 220px; 
- 			overflow: hidden; 
- 			transform: translate(-50%, calc(-100% + 10px)) scale(0.95); 
- 		} 
- 		#flag-tooltip.below { 
- 			transform: translate(-50%, 10px) scale(0.95); 
- 		} 
- 		#flag-tooltip.visible { 
- 			opacity: 1; 
- 			transform: translate(-50%, calc(-100% - 8px)) scale(1); 
- 		} 
- 		#flag-tooltip.below.visible { 
- 			transform: translate(-50%, 8px) scale(1); 
- 		} 
- 		.tooltip-flag { 
- 			width: 100%; 
- 			height: 120px; 
- 			background-size: cover; 
- 			background-position: center; 
- 		} 
- 		.tooltip-text { 
- 			padding: 0.75rem; 
- 			font-size: 0.875rem; 
- 			line-height: 1.25rem; 
- 		} 
-
- 		#pronoun-tooltip { 
- 			padding: 0.75rem; 
- 			width: max-content; 
- 			max-width: 300px; 
- 			line-height: 1.5; 
- 			text-align: left; 
- 			opacity: 0; 
- 			visibility: hidden; 
- 			transition: opacity 0.2s ease; 
- 		} 
- 		#pronoun-tooltip.visible { 
- 			opacity: 1; 
- 			visibility: visible; 
- 		} 
-
- 		/* Pride Flag Base Sgtyles */ 
- 		.pride-flag { 
- 			display: inline-block; 
- 			width: 48px; 
- 			height: 28px; 
- 			border-radius: 4px; 
- 			border: 1px solid rgba(255, 255, 255, 0.2); 
- 			transition: transform 0.2s ease; 
- 			cursor: pointer; 
- 		} 
- 		.flag-container:hover .pride-flag { 
- 			transform: scale(1.1); 
- 		} 
- 		/* Flag gradients */ 
- 		.flag-gay { 
- 			background: linear-gradient(to bottom, 
- 			 #078D70 0%, #078D70 14.28%, 
- 			 #26CEAA 14.28%, #26CEAA 28.56%, 
- 			 #98E8C1 28.56%, #98E8C1 42.84%, 
- 			 #FFFFFF 42.84%, #FFFFFF 57.12%, 
- 			 #7BADE2 57.12%, #7BADE2 71.4%, 
- 			 #5049CB 71.4%, #5049CB 85.68%, 
- 			 #3D1A78 85.68%, #3D1A78 100%); 
- 		} 
- 		.flag-nonbinary { background: linear-gradient(to bottom, #FCF434 25%, #FFFFFF 25% 50%, #9C59D1 50% 75%, #2C2C2C 75%); } 
- 		.flag-trans { background: linear-gradient(to bottom, #5BCEFA 20%, #F5A9B8 20% 40%, #FFFFFF 40% 60%, #F5A9B8 60% 80%, #5BCEFA 80%); } 
- 		
- 		/* Language Switcher Flag Styles */ 
- 		.lang-flag { 
- 			width: 24px; 
- 			height: 16px; 
- 			border-radius: 2px; 
- 			background-size: cover; 
- 			box-shadow: 0 0 1px rgba(0,0,0,0.5); 
- 		} 
-
- 		/* --- Music Player Styles --- */ 
- 		input[type="range"] { 
- 			-webkit-appearance: none; 
- 			appearance: none; 
- 			background: transparent; 
- 			cursor: pointer; 
- 			width: 100%; 
- 			/* Custom CSS variable for progress trail */ 
- 			--track-progress: 0%; 
- 		} 
- 		/* Track */ 
- 		input[type="range"]::-webkit-slider-runnable-track { 
- 			background: linear-gradient(to right, #67e8f9 var(--track-progress), rgba(255, 255, 255, 0.2) var(--track-progress)); 
- 			height: 4px; 
- 			border-radius: 2px; 
- 		} 
- 		input[type="range"]::-moz-range-track { 
- 			background: linear-gradient(to right, #67e8f9 var(--track-progress), rgba(255, 255, 255, 0.2) var(--track-progress)); 
- 			height: 4px; 
- 			border-radius: 2px; 
- 		} 
- 		/* Thumb */ 
- 		input[type="range"]::-webkit-slider-thumb { 
- 			-webkit-appearance: none; 
- 			margin-top: -4px;
- 			background-color: #fff; 
- 			height: 12px; 
- 			width: 12px; 
- 			border-radius: 50%; 
- 			transition: transform 0.1s ease-in-out; 
- 		} 
- 		input[type="range"]::-moz-range-thumb { 
- 			border: none; 
- 			background-color: #fff; 
- 			height: 12px; 
- 			width: 12px; 
- 			border-radius: 50%; 
- 			transition: transform 0.1s ease-in-out; 
- 		} 
- 		 input[type="range"]:hover::-webkit-slider-thumb { 
- 			transform: scale(1.2); 
- 		} 
- 		input[type="range"]:hover::-moz-range-thumb { 
- 			transform: scale(1.2); 
- 		} 
-
- 		main { 
- 			transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
- 		} 
- 		#pfp { 
- 			transition: transform 0.1s linear; 
- 		} 
-
- 		/* Visualizer Canvas */ 
- 		#visualizer-canvas { 
- 			position: absolute; 
- 			top: 0; 
- 			left: 0; 
- 			width: 100%; 
- 			height: 100%; 
- 			z-index: -1; 
- 			opacity: 0.2; 
- 		} 
-
- 		/* 3D Tilt container */ 
- 		.tilt-card { 
- 			transform-style: preserve-3d; 
- 			transform: perspective(1000px); 
- 		} 
- 		
- 		/* Tilt card fixes */ 
- 		.social-card { 
- 			transition: background-color 0.2s ease-in-out; 
- 		} 
- 		.social-card:hover i { 
- 			color: #fff; 
- 		} 
-
- 		/* --- Character Image Styles --- */ 
- 		@keyframes paper-flutter-light { 
- 			0%, 100% { 
- 				transform: rotateZ(-1deg) skewX(0) skewY(0); 
- 				filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4)) brightness(1.0); 
- 			} 
- 			25% { 
- 				transform: rotateZ(1deg) skewX(-2deg) skewY(0deg); 
- 				filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4)) brightness(1.05); 
- 			} 
- 			50% { 
- 				transform: rotateZ(0deg) skewX(1deg) skewY(1deg); 
- 				filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4)) brightness(0.98); 
- 			} 
- 			75% { 
- 				transform: rotateZ(-2deg) skewX(0) skewY(-1deg); 
- 				filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4)) brightness(1.02); 
- 			} 
- 		} 
-
- 		.character-image { 
- 			animation: paper-flutter-light 4s steps(1, end) infinite; 
- 			transition: transform 0.3s ease, filter 0.3s ease; 
- 		} 
- 		.character-image:hover { 
- 			transform: scale(1.05) !important;
- 			animation-play-state: paused; 
- 		} 
-
- 	</style> 
- <style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.visible{visibility:visible}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.right-0{right:0px}.right-4{right:1rem}.top-4{top:1rem}.top-full{top:100%}.bottom-4{bottom:1rem}.left-\[calc\(50\%\+28rem\)\]{left:calc(50% + 28rem)}.top-1\/2{top:50%}.z-50{z-index:50}.z-10{z-index:10}.z-20{z-index:20}.z-40{z-index:40}.mx-auto{margin-left:auto;margin-right:auto}.mt-2{margin-top:0.5rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-2{margin-left:0.5rem}.mr-4{margin-right:1rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-32{height:8rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-auto{height:auto}.h-full{height:100%}.min-h-\[200px\]{min-height:200px}.min-h-screen{min-height:100vh}.w-40{width:10rem}.w-10{width:2.5rem}.w-28{width:7rem}.w-32{width:8rem}.w-4{width:1rem}.w-48{width:12rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-full{width:100%}.max-w-4xl{max-width:56rem}.max-w-md{max-width:28rem}.shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-4{--tw-translate-y:1rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.375rem * var(--tw-space-x-reverse));margin-left:calc(0.375rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-hidden{overflow-x:hidden}.overflow-x-clip{overflow-x:clip}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.border-orange-400\/20{border-color:rgb(251 146 60 / 0.2)}.border-transparent{border-color:transparent}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/30{background-color:rgb(0 0 0 / 0.3)}.bg-black\/70{background-color:rgb(0 0 0 / 0.7)}.bg-black\/20{background-color:rgb(0 0 0 / 0.2)}.bg-black\/50{background-color:rgb(0 0 0 / 0.5)}.bg-cyan-500\/10{background-color:rgb(6 182 212 / 0.1)}.bg-orange-400\/10{background-color:rgb(251 146 60 / 0.1)}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-white\/5{background-color:rgb(255 255 255 / 0.05)}.object-cover{object-fit:cover}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-1{padding:0.25rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pt-6{padding-top:1.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.leading-relaxed{line-height:1.625}.tracking-wider{letter-spacing:0.05em}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.text-cyan-300{--tw-text-opacity:1;color:rgb(103 232 249 / var(--tw-text-opacity, 1))}.text-cyan-400{--tw-text-opacity:1;color:rgb(34 211 238 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-orange-300{--tw-text-opacity:1;color:rgb(253 186 116 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow))}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow))}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-lg{--tw-backdrop-blur:blur(16px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.delay-100{transition-delay:100ms}.delay-200{transition-delay:200ms}.delay-300{transition-delay:300ms}.delay-500{transition-delay:500ms}.delay-\[400ms\]{transition-delay:400ms}.delay-\[450ms\]{transition-delay:450ms}.delay-\[600ms\]{transition-delay:600ms}.delay-\[700ms\]{transition-delay:700ms}.duration-200{transition-duration:200ms}.duration-500{transition-duration:500ms}.ease-out{transition-timing-function:cubic-bezier(0, 0, 0.2, 1)}.hover\:bg-black\/50:hover{background-color:rgb(0 0 0 / 0.5)}.hover\:bg-white\/10:hover{background-color:rgb(255 255 255 / 0.1)}.hover\:bg-cyan-500\/20:hover{background-color:rgb(6 182 212 / 0.2)}.hover\:bg-white\/20:hover{background-color:rgb(255 255 255 / 0.2)}.hover\:text-cyan-300:hover{--tw-text-opacity:1;color:rgb(103 232 249 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:ml-4{margin-left:1rem}.sm\:mt-0{margin-top:0px}.sm\:w-48{width:12rem}.sm\:w-56{width:14rem}.sm\:w-auto{width:auto}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-start{align-items:flex-start}.sm\:justify-start{justify-content:flex-start}.sm\:justify-end{justify-content:flex-end}.sm\:space-y-0 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0px * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0px * var(--tw-space-y-reverse))}.sm\:p-6{padding:1.5rem}.sm\:text-left{text-align:left}}@media (min-width: 768px){.md\:mb-0{margin-bottom:0px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}}@media (min-width: 1024px){.lg\:block{display:block}.lg\:hidden{display:none}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:p-8{padding:2rem}}</style></head> 
- <body class="bg-black text-gray-300 overflow-x-clip">
-
- 	<div class="background-container" style="transform: translateX(0px) translateY(0px) scale(1.1);"></div> 
-
- 	<!-- Language Switcher --> 
- 	<div id="lang-switcher" class="fixed top-4 right-4 z-50"> 
- 		<button id="lang-button" class="flex items-center space-x-2 bg-black/30 p-2 rounded-full border border-white/10 hover:bg-black/50 transition-colors"><svg class="lang-flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 6"><path fill="#fff" d="M0 0h9v3H0z"></path><path fill="#d52b1e" d="M0 3h9v3H0z"></path><path fill="#0039a6" d="M0 2h9v2H0z"></path></svg></button> 
- 		<div id="lang-dropdown" class="absolute top-full right-0 mt-2 w-40 bg-black/70 backdrop-blur-sm border border-white/10 rounded-lg shadow-lg overflow-hidden hidden"> 
- 			<a href="#" class="lang-option flex items-center space-x-3 p-3 hover:bg-white/10 transition-colors" data-lang="en"> 
- 				<svg class="lang-flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><clipPath id="a"><path d="M0 0v30h60V0z"></path></clipPath><clipPath id="b"><path d="M30 15h30v15zv15h-30zH0z"></path></clipPath><g clip-path="url(#a)"><path d="M0 0v30h60V0z" fill="#012169"></path><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"></path><path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"></path><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"></path><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"></path></g></svg> 
- 				<span class="text-white font-medium text-sm">english</span> 
- 			</a> 
- 			<a href="#" class="lang-option flex items-center space-x-3 p-3 hover:bg-white/10 transition-colors" data-lang="ru"> 
- 				 <svg class="lang-flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 6"><path fill="#fff" d="M0 0h9v3H0z"></path><path fill="#d52b1e" d="M0 3h9v3H0z"></path><path fill="#0039a6" d="M0 2h9v2H0z"></path></svg> 
- 				<span class="text-white font-medium text-sm">русский</span> 
- 			</a> 
- 		</div> 
- 	</div> 
- 	
- 	<!-- Character Image (ty svit) --> 
- 	<a href="https://t.me/d1np1" target="_blank" rel="noopener noreferrer" class="character-image hidden lg:block absolute top-1/2 -translate-y-1/2 left-[calc(50%+28rem)] w-48 z-20"> 
- 		<img src="public/char.png" alt="Character Art" class="w-full h-auto" onerror="this.onerror=null; this.src='https://placehold.co/192x286/1a1a1a/ffffff?text=Art';"> 
- 	</a> 
- 	<a href="https://t.me/d1np1" target="_blank" rel="noopener noreferrer" class="character-image lg:hidden fixed bottom-4 right-4 w-28 z-40"> 
- 		<img src="public/char.png" alt="Character Art" class="w-full h-auto" onerror="this.onerror=null; this.src='https://placehold.co/112x168/1a1a1a/ffffff?text=Art';"> 
- 	</a> 
- 	<!-- End Character Image --> 
-
- 	<div class="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8"> 
- 		<!-- Main Content Card --> 
- 		<div class="w-full max-w-4xl mx-auto bg-black/50 backdrop-blur-lg rounded-2xl shadow-2xl flex flex-col border border-white/10"> 
- 			
- 			<header class="p-6 border-b border-white/10 shrink-0"> 
- 				<div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0"> 
- 					<h1 class="text-3xl font-bold text-white tracking-wider">NeyRon</h1> 
- 					<nav class="flex items-center space-x-2 bg-black/30 p-1 rounded-full border border-white/10"> 
- 						<a href="#home" class="nav-link px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 active" data-translate-key="nav.home">главная</a> 
- 						<a href="#portfolio" class="nav-link px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200" data-translate-key="nav.portfolio">портфолио</a> 
- 					</nav> 
- 				</div> 
- 			</header> 
-
- 			<main class="relative flex-grow overflow-x-hidden" style="height: 609px;"> 
- 				<section id="home" class="content-section p-8 slide-active"> 
- 					<div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-8"> 
- 						<img id="pfp" src="public/neyron.png" alt="pfp" class="w-32 h-32 rounded-full border-2 border-white/20 object-cover shadow-lg shrink-0 transition-all duration-500 ease-out" onerror="this.onerror=null; this.src='https://placehold.co/128x128/1a1a1a/ffffff?text=User';"> 
- 						<div class="flex-grow flex flex-col sm:flex-row justify-between items-center sm:items-start w-full"> 
- 							<div id="bio" class="text-center sm:text-left transition-all duration-500 ease-out delay-100"> 
- 								<h2 class="text-2xl font-bold text-white" data-translate-key="bio.name">нейрон</h2> 
- 								<div class="flex items-center justify-center sm:justify-start mb-3"> 
- 									<p class="text-cyan-400 font-medium" data-translate-key="bio.pronouns">он/его</p> 
- 									<button id="pronoun-info-btn" class="ml-2 text-gray-400 hover:text-white"> 
- 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info w-4 h-4"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> 
- 									</button> 
- 								</div> 
- 								<p class="text-gray-300 leading-relaxed max-w-md mb-3" data-translate-key="bio.description">15-летний разработчик, фотограф и видеооператор из России. Создаю игры в Roblox и занимаюсь веб-разработкой. Также увлекаюсь монтажом видео.</p> 
- 								<!-- Badges Container --> 
- 								<div id="badges" class="flex flex-wrap gap-2 justify-center sm:justify-start"> 
- 									<div class="flex items-center space-x-1.5 bg-orange-400/10 border border-orange-400/20 rounded-md px-2 py-1 delay-[450ms]"> 
- 										<div class="w-4 h-4 rounded overflow-hidden shrink-0"> 
- 											<img src="public/pfp.png" class="w-full h-full object-cover" alt="Roblox Developer"> 
- 										</div> 
- 										<span class="text-xs font-semibold text-orange-300">Roblox Developer</span> 
- 									</div> 
- 								</div> 
- 							</div> 
- 							<!-- Pride Flags Container --> 
- 							<div id="flags" class="flex shrink-0 gap-3 mt-4 sm:mt-0 sm:ml-4"> 
- 								<div class="flag-container relative delay-200" data-description-en="&lt;b class='text-white'&gt;Developer:&lt;/b&gt; I create games and web projects." data-description-ru="&lt;b class='text-white'&gt;Разработчик:&lt;/b&gt; Создаю игры и веб-проекты."> 
- 									<div class="pride-flag flag-gay"></div> 
- 								</div> 
- 								<div class="flag-container relative delay-300" data-description-en="&lt;b class='text-white'&gt;Photographer:&lt;/b&gt; I take professional photos." data-description-ru="&lt;b class='text-white'&gt;Фотограф:&lt;/b&gt; Делаю профессиональные фотосессии."> 
- 									<div class="pride-flag flag-nonbinary"></div> 
- 								</div> 
- 								<div class="flag-container relative delay-[400ms]" data-description-en="&lt;b class='text-white'&gt;Video Editor:&lt;/b&gt; I edit videos and create content." data-description-ru="&lt;b class='text-white'&gt;Видеомонтажер:&lt;/b&gt; Монтирую видео и создаю контент."> 
- 									<div class="pride-flag flag-trans"></div> 
- 								</div> 
- 							</div> 
- 						</div> 
- 					</div> 
- 					<h3 class="text-xl font-bold text-white mb-4 border-t border-white/10 pt-6" data-translate-key="socials.title">Соц.Сети</h3> 
- 					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"> 
- 						<a href="https://github.com/dimkabrk" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-500" style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github w-6 h-6 mr-4 text-gray-400"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg><div><h3 class="font-semibold text-white">github</h3><p class="text-sm text-gray-400">@dimkabrk</p></div><div class="js-tilt-glare" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; border-radius: inherit;"><div class="js-tilt-glare-inner" style="position: absolute; top: 50%; left: 50%; pointer-events: none; background-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%); transform: rotate(180deg) translate(-50%, -50%); transform-origin: 0% 0% 0px; opacity: 0; width: 532px; height: 532px;"></div></div></a> 
- 						<a href="https://t.me/neyronw" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[600ms]" style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send w-6 h-6 mr-4 text-gray-400"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg><div><h3 class="font-semibold text-white" data-translate-key="socials.telegramchannel">канал в телеграме</h3><p class="text-sm text-gray-400">@neyronw</p></div><div class="js-tilt-glare" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; border-radius: inherit;"><div class="js-tilt-glare-inner" style="position: absolute; top: 50%; left: 50%; pointer-events: none; background-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%); transform: rotate(180deg) translate(-50%, -50%); transform-origin: 0% 0% 0px; opacity: 0; width: 532px; height: 532px;"></div></div></a> 
- 						<a href="https://www.roblox.com/users/1676221850/profile" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[700ms]" style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-box w-6 h-6 mr-4 text-gray-400"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg><div><h3 class="font-semibold text-white" data-translate-key="socials.roblox">роблокс</h3><p class="text-sm text-gray-400">@Reset40853830</p></div><div class="js-tilt-glare" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; border-radius: inherit;"><div class="js-tilt-glare-inner" style="position: absolute; top: 50%; left: 50%; pointer-events: none; background-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%); transform: rotate(180deg) translate(-50%, -50%); transform-origin: 0% 0% 0px; opacity: 0; width: 532px; height: 532px;"></div></div></a> 
- 						<a href="https://discord.gg/KzSbDzWb" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[700ms]" style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-headphones w-6 h-6 mr-4 text-gray-400"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg><div><h3 class="font-semibold text-white" data-translate-key="socials.discord">дискорд</h3><p class="text-sm text-gray-400">dimabratskii</p></div><div class="js-tilt-glare" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; border-radius: inherit;"><div class="js-tilt-glare-inner" style="position: absolute; top: 50%; left: 50%; pointer-events: none; background-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%); transform: rotate(180deg) translate(-50%, -50%); transform-origin: 0% 0% 0px; opacity: 0; width: 532px; height: 532px;"></div></div></a> 
- 						<a href="mailto:brkdima7@gmail.com" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[700ms]" style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-at-sign w-6 h-6 mr-4 text-gray-400"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg><div><h3 class="font-semibold text-white" data-translate-key="socials.email">почта</h3><p class="text-sm text-gray-400">brkdima7@gmail.com</p></div><div class="js-tilt-glare" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; border-radius: inherit;"><div class="js-tilt-glare-inner" style="position: absolute; top: 50%; left: 50%; pointer-events: none; background-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%); transform: rotate(180deg) translate(-50%, -50%); transform-origin: 0% 0% 0px; opacity: 0; width: 532px; height: 532px;"></div></div></a> 
- 						<a href="https://t.me/xerlysup_bot" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[700ms]" style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send w-6 h-6 mr-4 text-gray-400"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg><div><h3 class="font-semibold text-white">Telegram Bot</h3><p class="text-sm text-gray-400">@xerlysup_bot</p></div><div class="js-tilt-glare" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; border-radius: inherit;"><div class="js-tilt-glare-inner" style="position: absolute; top: 50%; left: 50%; pointer-events: none; background-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%); transform: rotate(180deg) translate(-50%, -50%); transform-origin: 0% 0% 0px; opacity: 0; width: 532px; height: 532px;"></div></div></a> 
- 						<a href="https://neystars.ru" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[700ms]" style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star w-6 h-6 mr-4 text-gray-400"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg><div><h3 class="font-semibold text-white">NeyStars</h3><p class="text-sm text-gray-400">neystars.ru</p></div><div class="js-tilt-glare" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; border-radius: inherit;"><div class="js-tilt-glare-inner" style="position: absolute; top: 50%; left: 50%; pointer-events: none; background-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%); transform: rotate(180deg) translate(-50%, -50%); transform-origin: 0% 0% 0px; opacity: 0; width: 532px; height: 532px;"></div></div></a> 
-
- 					</div> 
- 				</section> 
-
- 				<section id="portfolio" class="content-section p-8 slide-off-right"> 
- 					<div class="flex flex-col md:flex-row justify-between items-center mb-6"> 
- 						<h2 class="text-2xl font-bold text-white mb-4 md:mb-0" data-translate-key="portfolio.title">портфолио</h2> 
- 						 <div id="portfolio-nav" class="flex items-center space-x-2 border border-white/10 rounded-full p-1 bg-black/20"> 
- 							 <button data-target="coding" class="sub-nav-link px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 border border-transparent active" data-translate-key="portfolio.coding">кодинг</button> 
- 							 <button data-target="projects" class="sub-nav-link px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 border border-transparent" data-translate-key="portfolio.projects">проекты</button> 
- 						 </div> 
- 					</div> 
- 					<div id="portfolio-content-wrapper" class="relative min-h-[200px] overflow-x-hidden"> 
- 						
- 						<!-- Pane 1: Coding --> 
- 						<div id="coding" class="portfolio-content p-4 slide-active"> 
- 							<div class="grid grid-cols-1 md:grid-cols-2 gap-4"> 
- 								<div class="bg-white/5 p-5 rounded-lg border border-white/10 tilt-card" style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);"> 
- 									<h3 class="font-bold text-lg text-white mb-2">WB Simulator</h3> 
- 									<p class="text-gray-400 text-sm mb-4">Игра в Roblox про симулятор Wildberries. Игроки могут почуствовать себя настоящими работниками ПВЗ.</p> 
- 									<div class="flex items-center space-x-4"><a href="https://www.roblox.com/games/???/" class="text-sm text-cyan-400 hover:text-cyan-300" data-translate-key="portfolio.link.playgame">играть</a></div> 
- 								<div class="js-tilt-glare" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; border-radius: inherit;"><div class="js-tilt-glare-inner" style="position: absolute; top: 50%; left: 50%; pointer-events: none; background-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%); transform: rotate(180deg) translate(-50%, -50%); transform-origin: 0% 0% 0px; opacity: 0; width: 766px; height: 766px;"></div></div></div> 
- 							</div> 
- 						</div> 
-
- 						<!-- Pane 2: Projects --> 
- 						<div id="projects" class="portfolio-content p-4 slide-off-right"> 
- 							 <div class="space-y-4"> 
- 								<div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10 tilt-card" style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);"> 
- 									<div> 
- 										<h3 class="font-semibold text-white">NeyStars</h3> 
- 										<p class="text-sm text-gray-400">Сервис для покупки Telegram Stars</p> 
- 									</div> 
- 									<a href="https://neystars.ru" class="bg-cyan-500/10 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium hover:bg-cyan-500/20" data-translate-key="portfolio.link.visit">посетить</a> 
- 								<div class="js-tilt-glare" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; border-radius: inherit;"><div class="js-tilt-glare-inner" style="position: absolute; top: 50%; left: 50%; pointer-events: none; background-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%); transform: rotate(180deg) translate(-50%, -50%); transform-origin: 0% 0% 0px; opacity: 0; width: 1566px; height: 1566px;"></div></div></div> 
- 								<div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10 tilt-card" style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);"> 
- 									<div> 
- 										<h3 class="font-semibold text-white">Вторые</h3> 
- 										<p class="text-sm text-gray-400">Свое молодежное творческое сообщество Вторых</p> 
- 									</div> 
- 									<a href="https://t.me/myvtorie" class="bg-cyan-500/10 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium hover:bg-cyan-500/20" data-translate-key="portfolio.link.visit">посетить</a> 
- 								<div class="js-tilt-glare" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; pointer-events: none; border-radius: inherit;"><div class="js-tilt-glare-inner" style="position: absolute; top: 50%; left: 50%; pointer-events: none; background-image: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%); transform: rotate(180deg) translate(-50%, -50%); transform-origin: 0% 0% 0px; opacity: 0; width: 1566px; height: 1566px;"></div></div></div> 
- 							 </div> 
- 						</div> 
-
- 					</div> 
- 				</section> 
- 			</main> 
- 		</div> 
- 		
- 		<!-- Music Player --> 
- 		<div id="music-player" class="relative w-full max-w-4xl mx-auto bg-black/50 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/10 mt-6 p-4 flex flex-col sm:flex-row items-center gap-4"> 
- 			<canvas id="visualizer-canvas" width="894" height="78"></canvas> 
- 			<!-- Audio element --> 
- 			<audio id="audio-player" controls preload="metadata">
-      <source src="public/music.mp3" type="audio/mpeg">
-        Ваш браузер не поддерживает аудио.
-    </audio>
- 			
- 			<!-- Track Info --> 
- 			<div class="w-full sm:w-48 shrink-0 text-center sm:text-left z-10"> 
- 				<p id="track-title" class="text-white font-semibold truncate">Young Black Rich</p> 
- 				<p id="track-artist" class="text-gray-400 text-sm truncate">Melly Mike</p> 
- 			</div> 
- 			
- 			<!-- Main Controls --> 
- 			<div class="flex-grow flex flex-col items-center gap-2 w-full sm:w-auto z-10"> 
- 				<!-- Control Buttons --> 
- 				<div class="flex items-center gap-2"> 
- 					<button id="prev-track-btn" class="p-2 text-gray-400 hover:text-white transition-colors active:scale-95"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-back w-5 h-5"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg></button> 
- 					<button id="play-pause-btn" class="p-2 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors active:scale-95"> 
- 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play w-6 h-6" id="play-pause-icon"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> 
- 					</button> 
- 					<button id="next-track-btn" class="p-2 text-gray-400 hover:text-white transition-colors active:scale-95"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-forward w-5 h-5"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg></button> 
- 				</div> 
- 				<!-- Timeline --> 
- 				<div class="flex-grow flex items-center gap-2 w-full"> 
- 					<span id="current-time" class="text-xs w-10 text-right">0:00</span> 
- 					<input id="timeline" type="range" value="0" min="0" max="100" class="w-full"> 
- 					<span id="total-time" class="text-xs w-10 text-left">0:00</span> 
- 				</div> 
- 			</div> 
- 			
- 			<!-- Volume and Options --> 
- 			<div class="flex items-center gap-2 justify-between sm:justify-end w-full sm:w-56 z-10"> 
- 				<div class="flex flex-col space-y-1 w-full"> 
- 					<div class="flex items-center gap-2"> 
- 						<button id="volume-btn" class="p-1 text-gray-400 hover:text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-volume-2 w-5 h-5"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></button> 
- 						<input id="volume-slider" type="range" value="100" min="0" max="100" class="w-full" style="--track-progress: 100%;"> 
- 					</div> 
- 					 <div class="flex items-center gap-2"> 
- 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-fast-forward w-5 h-5 text-gray-400"><polygon points="13 19 22 12 13 5 13 19"></polygon><polygon points="2 19 11 12 2 5 2 19"></polygon></svg> 
- 						<input id="speed-slider" type="range" value="1.1" min="0.5" max="2" step="0.05" class="w-full"> 
- 						<span id="speed-value" class="text-xs w-10 text-center text-gray-400">1.10x</span> 
- 					 </div> 
- 				</div> 
- 				<a id="track-link" href="https://soundcloud.com/madk1d9/tak-po" target="_blank" class="p-2 text-gray-400 hover:text-white transition-colors active:scale-95"> 
- 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link w-5 h-5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> 
- 				</a> 
- 			</div> 
- 		</div> 
-
- 	</div> 
- 	
- 	<!-- Tooltips --> 
- 	<div id="flag-tooltip" class="tooltip" style="top: 193.717px; left: 986px;"><div class="flex flex-col"><div class="tooltip-flag" style="background: linear-gradient(rgb(91, 206, 250) 20%, rgb(245, 169, 184) 20%, rgb(245, 169, 184) 40%, rgb(255, 255, 255) 40%, rgb(255, 255, 255) 60%, rgb(245, 169, 184) 60%, rgb(245, 169, 184) 80%, rgb(91, 206, 250) 80%);"></div><div class="tooltip-text"><b class="text-white">Видеомонтажер:</b> Монтирую видео и создаю контент.</div></div></div> 
- 	<div id="pronoun-tooltip" class="tooltip" style="top: -248.167px; left: 251.217px;"><b>он/его:</b><br>я слышал, что <b>он</b> замечательно танцует.<br>я <b>его</b> сегодня ещё не видела.<br>дай <b>ему</b> время.<br>не нужно <b>его</b> осуждать.<br>я горжусь <b>им</b>.<br>расскажи мне о <b>нём</b>!<br>тебе стоит познакомиться с <b>ним</b>.<br>у <b>него</b> есть кот.<br><b>он</b> очень талантлив.<br><b>он</b> замечательный.</div> 
-
- 	<script> 
- 		document.addEventListener('DOMContentLoaded', () => { 
- 			// --- Translations Object --- 
- 			const translations = { 
- 			en: { 
- 				'nav.home': 'home', 
- 				'nav.portfolio': 'portfolio', 
- 				'bio.name': 'neyron', 
- 				'bio.pronouns': 'he/him', 
- 				'bio.description': '15 y/o developer, photographer and video editor from Russia. I create Roblox games and web projects.', 
- 				'pronoun.tooltip': "<b>he/him:</b><br>i think <b>he</b> is very nice.<br>i met <b>him</b> recently.<br>is this <b>his</b> dog?<br><b>he</b> told me that the house is <b>his</b>.", 
- 				'socials.title': 'socials', 
- 				'socials.twitter': 'twitter / x', 
- 				'socials.telegramchannel': 'telegram channel', 
- 				'socials.telegram': 'telegram', 
- 				'socials.roblox': 'roblox', 
- 				'socials.discord': 'discord', 
- 				'socials.email': 'email', 
- 				'portfolio.title': 'portfolio', 
- 				'portfolio.coding': 'coding', 
- 				'portfolio.projects': 'projects', 
- 				'portfolio.link.visit': 'visit', 
- 				'portfolio.link.original': 'original', 
- 				'portfolio.link.playgame': 'play', 
- 				'portfolio.link.listen': 'listen', 
- 			}, 
- 			ru: { 
- 				'nav.home': 'главная', 
- 				'nav.portfolio': 'портфолио', 
- 				'bio.name': 'нейрон', 
- 				'bio.pronouns': 'он/его', 
- 				'bio.description': '15-летний разработчик, фотограф и видеооператор из России. Создаю игры в Roblox и занимаюсь веб-разработкой. Также увлекаюсь монтажом видео.', 
- 				'pronoun.tooltip': "<b>он/его:</b><br>я слышал, что <b>он</b> замечательно танцует.<br>я <b>его</b> сегодня ещё не видела.<br>дай <b>ему</b> время.<br>не нужно <b>его</b> осуждать.<br>я горжусь <b>им</b>.<br>расскажи мне о <b>нём</b>!<br>тебе стоит познакомиться с <b>ним</b>.<br>у <b>него</b> есть кот.<br><b>он</b> очень талантлив.<br><b>он</b> замечательный.", 
- 				'socials.title': 'соцсети', 
- 				'socials.twitter': 'twitter / x', 
- 				'socials.telegramchannel': 'канал в телеграме', 
- 				'socials.telegram': 'телеграм', 
- 				'socials.roblox': 'роблокс', 
- 				'socials.discord': 'дискорд', 
- 				'socials.email': 'почта', 
- 				'portfolio.title': 'портфолио', 
- 				'portfolio.coding': 'кодинг', 
- 				'portfolio.projects': 'проекты', 
- 				'portfolio.link.visit': 'посетить', 
- 				'portfolio.link.original': 'оригинал', 
- 				'portfolio.link.playgame': 'играть', 
- 				'portfolio.link.listen': 'слушать', 
- 			} 
- 			}; 
- 			
- 			// --- Playlist Configuration --- 
- 			  const playlist = [ 
- 				   { title: "Young Black Rich", artist: "Melly Mike", src: "public/music.mp3", link: "https://soundcloud.com/mellymike/young-black-rich" }, 
- 				]; 
- 			
- 			let currentTrackIndex = 0; 
- 			let currentLang; 
-
- 			// --- Element Caching --- 
- 			const pfp = document.getElementById('pfp'); 
- 			const bgContainer = document.querySelector('.background-container'); 
- 			const langBtn = document.getElementById('lang-button'); 
- 			const langDD = document.getElementById('lang-dropdown'); 
- 			const mainLinks = Array.from(document.querySelectorAll('header .nav-link')); 
- 			const mainPanes = Array.from(document.querySelectorAll('main > .content-section')); 
- 			const folioLinks = Array.from(document.querySelectorAll('#portfolio-nav .sub-nav-link')); 
- 			const folioPanes = Array.from(document.querySelectorAll('#portfolio-content-wrapper .portfolio-content')); 
- 			const mainEl = document.querySelector('main'); 
- 			const flagTooltip = document.getElementById('flag-tooltip'); 
- 			const pronounTooltip = document.getElementById('pronoun-tooltip'); 
- 			const flagConts = document.querySelectorAll('.flag-container'); 
- 			const pronounInfoBtn = document.getElementById('pronoun-info-btn'); 
- 			const aud = document.getElementById('audio-player'); 
- 			const ppBtn = document.getElementById('play-pause-btn'); 
- 			const prevBtn = document.getElementById('prev-track-btn'); 
- 			const nextBtn = document.getElementById('next-track-btn'); 
- 			const timeline = document.getElementById('timeline'); 
- 			const currTimeEl = document.getElementById('current-time'); 
- 			const totalTimeEl = document.getElementById('total-time'); 
- 			const volSldr = document.getElementById('volume-slider'); 
- 			const volBtn = document.getElementById('volume-btn'); 
- 			const speedSldr = document.getElementById('speed-slider'); 
- 			const speedValEl = document.getElementById('speed-value'); 
- 			const trackTitleEl = document.getElementById('track-title'); 
- 			const trackArtistEl = document.getElementById('track-artist'); 
- 			const trackLink = document.getElementById('track-link'); 
- 			const vizCanvas = document.getElementById('visualizer-canvas'); 
- 			
- 			// --- State --- 
- 			let activeMainIdx = 0; 
- 			let activeFolioIdx = 0; 
- 			let isPlaying = false; 
-
- 			// --- Web Audio API variables --- 
- 			let ctx; 
- 			let anlyzr; 
- 			let srcNode; 
- 			let dataArray; 
- 			let animFrameId; 
- 			let audioContextSetup = false; 
- 			let vizCtx; 
- 			
- 			// --- Language Management --- 
- 			function updateLang(lang) { 
- 				currentLang = lang; 
- 				localStorage.setItem('demoday_lang', lang); 
- 				document.querySelectorAll('[data-translate-key]').forEach(el => { 
- 					const key = el.dataset.translateKey; 
- 					if (translations[lang] && translations[lang][key]) { 
- 						el.innerHTML = translations[lang][key]; 
- 					} 
- 				}); 
-
- 				const selOpt = document.querySelector(`.lang-option[data-lang="${lang}"]`); 
- 				if (selOpt) { 
- 					langBtn.innerHTML = selOpt.querySelector('.lang-flag').outerHTML; 
- 				} 
- 				langDD.classList.add('hidden'); 
- 				
- 				// --- FIX: Recalculate height after text content changes --- 
- 				setTimeout(() => { 
- 					requestAnimationFrame(updateMainHeight); 
- 				}, 50); // A small delay ensures the browser has reflowed the content 
- 			} 
- 			
- 			// --- Animations --- 
- 			const animateEls = (sel) => { 
- 				document.querySelectorAll(sel).forEach(el => { 
- 					el.classList.remove('opacity-0', 'translate-y-4'); 
- 				}); 
- 			}; 
- 			
- 			// --- Navigation and View Management --- 
- 			function handleSlide(panes, newIdx, activeIdx) { 
- 				if (newIdx === activeIdx) return; 
- 				const dir = newIdx > activeIdx ? 'right-to-left' : 'left-to-right'; 
- 				const currPane = panes[activeIdx]; 
- 				const newPane = panes[newIdx]; 
- 				if (currPane) { 
- 					currPane.classList.remove('slide-active'); 
- 					currPane.classList.add(dir === 'right-to-left' ? 'slide-off-left' : 'slide-off-right'); 
- 				} 
- 				if (newPane) { 
- 					newPane.classList.remove('slide-off-left', 'slide-off-right'); 
- 					newPane.classList.add('slide-active'); 
- 				} 
- 			} 
- 			
- 			// --- Height Calculation --- 
- 			function updateMainHeight() { 
- 				const activeMainPane = mainPanes[activeMainIdx]; 
- 				if (!activeMainPane) return; 
-
- 				let reqHeight = 0; 
-
- 				if (activeMainPane.id === 'home') { 
- 					reqHeight = activeMainPane.scrollHeight; 
- 				} 
- 				else if (activeMainPane.id === 'portfolio') { 
- 					const folioWrap = document.getElementById('portfolio-content-wrapper'); 
- 					const activeFolioPane = folioPanes[activeFolioIdx]; 
-
- 					if (folioWrap && activeFolioPane) { 
- 						const staticHeight = folioWrap.offsetTop; 
- 						const dynamicHeight = activeFolioPane.scrollHeight; 
- 						const internalHeight = staticHeight + dynamicHeight; 
- 						const folioStyle = window.getComputedStyle(activeMainPane); 
- 						const paddingTop = parseFloat(folioStyle.paddingTop); 
- 						const paddingBottom = parseFloat(folioStyle.paddingBottom); 
- 						reqHeight = internalHeight + paddingTop + paddingBottom; 
- 					} 
- 				} 
-
- 				if (reqHeight > 0) { 
- 					mainEl.style.height = `${reqHeight}px`; 
- 				} 
- 			} 
- 			
- 			function updateView(mainTarget, subTarget) { 
- 				const newMainTarget = mainTarget || 'home'; 
- 				const newMainIdx = mainLinks.findIndex(link => link.getAttribute('href') === `#${newMainTarget}`); 
- 				
- 				if (newMainIdx !== -1 && newMainIdx !== activeMainIdx) { 
- 					handleSlide(mainPanes, newMainIdx, activeMainIdx); 
- 					activeMainIdx = newMainIdx; 
- 					mainLinks.forEach(l => l.classList.remove('active')); 
- 					mainLinks[newMainIdx].classList.add('active'); 
- 				} 
- 				
- 				if (newMainTarget === 'portfolio') { 
- 					// use provided subtarget, or default to the currently active one, or 'coding' 
- 					const newFolioTarget = subTarget || (folioLinks[activeFolioIdx] ? folioLinks[activeFolioIdx].dataset.target : 'coding'); 
- 					const newFolioIdx = folioLinks.findIndex(link => link.dataset.target === newFolioTarget); 
- 					if (newFolioIdx !== -1) { 
- 						handleSlide(folioPanes, newFolioIdx, activeFolioIdx); 
- 						activeFolioIdx = newFolioIdx; 
- 						folioLinks.forEach(l => l.classList.remove('active')); 
- 						folioLinks[newFolioIdx].classList.add('active'); 
- 					} 
- 				} 
- 				setTimeout(() => requestAnimationFrame(updateMainHeight), 50); 
- 			} 
-
- 			// --- Tooltip Logic --- 
- 			function setupTooltips() { 
- 				flagConts.forEach(cont => { 
- 					cont.addEventListener('mouseenter', () => { 
- 						const desc = cont.getAttribute(`data-description-${currentLang}`); 
- 						const flagEl = cont.querySelector('.pride-flag'); 
- 						if (!desc || !flagTooltip || !flagEl) return; 
- 						
- 						const flagStyle = window.getComputedStyle(flagEl).background; 
- 						flagTooltip.innerHTML = `<div class="flex flex-col"><div class="tooltip-flag" style="background: ${flagStyle};"></div><div class="tooltip-text">${desc}</div></div>`; 
- 						const rect = cont.getBoundingClientRect(); 
- 						const tooltipHeight = flagTooltip.offsetHeight; 
- 						
- 						if (rect.top - tooltipHeight < 10) { 
- 							flagTooltip.classList.add('below'); 
- 							flagTooltip.style.top = `${rect.bottom}px`; 
- 						} else { 
- 							flagTooltip.classList.remove('below'); 
- 							flagTooltip.style.top = `${rect.top}px`; 
- 						} 
-
- 						flagTooltip.style.left = `${rect.left + rect.width / 2}px`; 
- 						flagTooltip.classList.add('visible'); 
- 					}); 
-
- 					cont.addEventListener('mouseleave', () => { 
- 						if (!flagTooltip) return; 
- 						flagTooltip.classList.remove('visible', 'below'); 
- 					}); 
- 				}); 
-
- 				pronounInfoBtn.addEventListener('mouseenter', () => { 
- 					const tooltipText = translations[currentLang]['pronoun.tooltip']; 
- 					pronounTooltip.innerHTML = tooltipText; 
-
- 					const btnRect = pronounInfoBtn.getBoundingClientRect(); 
- 					const tooltipRect = pronounTooltip.getBoundingClientRect(); 
-
- 					let top = btnRect.bottom + 10; 
- 					let left = btnRect.left + btnRect.width / 2 - tooltipRect.width / 2; 
- 					
- 					if (top + tooltipRect.height > window.innerHeight) { 
- 						top = btnRect.top - tooltipRect.height - 10; 
- 					} 
-
- 					if (left < 10) left = 10; 
- 					if (left + tooltipRect.width > window.innerWidth) { 
- 						left = window.innerWidth - tooltipRect.width - 10; 
- 					} 
- 					
- 					pronounTooltip.style.top = `${top}px`; 
- 					pronounTooltip.style.left = `${left}px`; 
- 					pronounTooltip.classList.add('visible'); 
- 				}); 
- 				
- 				pronounInfoBtn.addEventListener('mouseleave', () => { 
- 					pronounTooltip.classList.remove('visible'); 
- 				}); 
- 			} 
-
- 			// --- Visualizer & PFP Bounce --- 
- 			function animationLoop() { 
- 				animFrameId = requestAnimationFrame(animationLoop); 
- 				if (!anlyzr) return; 
-
- 				anlyzr.getByteFrequencyData(dataArray); 
- 				
- 				// PFP Bounce 
- 				const bass = (dataArray[0] + dataArray[1] + dataArray[2]) / 2; 
- 				const pfpScale = 1 + (bass / 255) * 0.15; 
- 				pfp.style.transform = `scale(${pfpScale})`; 
-
- 				// Bar Visualizer 
- 				vizCtx.clearRect(0, 0, vizCanvas.width, vizCanvas.height); 
- 				const barCount = 64; 
- 				const barWidth = (vizCanvas.width / barCount) * 0.7; 
- 				const barGap = (vizCanvas.width / barCount) * 0.3; 
- 				let x = 0; 
-
- 				for (let i = 0; i < barCount; i++) { 
- 					const barHeight = dataArray[i] * 0.3; 
- 					
- 					const r = 255; 
- 					const g = 255 + (dataArray[i] / 2); 
- 					const b = 200 + (dataArray[i] / 2); 
- 					vizCtx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.5)`; 
-
- 					vizCtx.fillRect(x, vizCanvas.height - barHeight, barWidth, barHeight); 
- 					x += barWidth + barGap; 
- 				} 
- 			} 
-
- 			function setupAudioContext() { 
- 				if (audioContextSetup) return; 
- 				try { 
- 					const AudioContext = window.AudioContext || window.webkitAudioContext; 
- 					ctx = new AudioContext(); 
- 					srcNode = ctx.createMediaElementSource(aud); 
- 					anlyzr = ctx.createAnalyser(); 
- 					srcNode.connect(anlyzr); 
- 					anlyzr.connect(ctx.destination); 
- 					anlyzr.fftSize = 256; 
- 					const bufferLength = anlyzr.frequencyBinCount; 
- 					dataArray = new Uint8Array(bufferLength); 
- 					
- 					vizCtx = vizCanvas.getContext('2d'); 
- 					audioContextSetup = true; 
- 				} catch (e) { 
- 					console.error("Web Audio API setup failed:", e); 
- 				} 
- 			} 
-
- 			// --- Parallax Effect --- 
- 			function setupParallax() { 
- 				window.addEventListener('mousemove', (e) => { 
- 					if (isPlaying) {
- 						const x = (e.clientX - window.innerWidth / 2) / window.innerWidth; 
- 						const y = (e.clientY - window.innerHeight / 2) / window.innerHeight; 
- 						bgContainer.style.transform = `translateX(${x * -20}px) translateY(${y * -20}px) scale(1.1)`; 
- 					} else { 
- 						bgContainer.style.transform = `translateX(0) translateY(0) scale(1.1)`; 
- 					} 
- 				}); 
- 			} 
-
-
- 			// --- Music Player Logic --- 
- 			function loadTrack(idx) { 
- 				currentTrackIndex = idx; 
- 				const track = playlist[idx]; 
- 				trackTitleEl.textContent = track.title; 
- 				trackArtistEl.textContent = track.artist; 
- 				trackLink.href = track.link; 
- 				aud.src = track.src; 
- 				aud.load(); 
- 				aud.playbackRate = parseFloat(speedSldr.value); 
- 				if (isPlaying) { 
- 					const playPromise = aud.play(); 
- 					if (playPromise !== undefined) { 
- 						playPromise.catch(e => { 
- 							console.error("Autoplay was prevented:", e); 
- 							isPlaying = false; 
- 						}); 
- 					} 
- 				} 
- 			} 
-
- 			function togglePlay() { 
- 				setupAudioContext(); 
- 				isPlaying = !isPlaying; 
- 				if (isPlaying) { 
- 					aud.play().catch(e => { 
- 						console.error("Play error:", e); 
- 						isPlaying = false; 
- 					}); 
- 				} else { 
- 					aud.pause(); 
- 				} 
- 			} 
- 			
- 			function nextTrack() { 
- 				currentTrackIndex = (currentTrackIndex + 1) % playlist.length; 
- 				loadTrack(currentTrackIndex); 
- 			} 
- 			
- 			function prevTrack() { 
- 				currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length; 
- 				loadTrack(currentTrackIndex); 
- 			} 
- 			
- 			function updVolIcon() { 
- 				let iconName = 'volume-2'; 
- 				if (aud.muted || aud.volume === 0) { 
- 					iconName = 'volume-x'; 
- 				} else if (aud.volume < 0.5) { 
- 					iconName = 'volume-1'; 
- 				} 
- 				volBtn.innerHTML = feather.icons[iconName].toSvg({ class: 'w-5 h-5' }); 
- 			} 
-
- 			const fmtTime = (time) => { 
- 				if (isNaN(time)) return "0:00"; 
- 				const mins = Math.floor(time / 60); 
- 				const secs = Math.floor(time % 60); 
- 				return `${mins}:${secs.toString().padStart(2, '0')}`; 
- 			}; 
- 			
- 			function setupMP() { 
- 				aud.preservesPitch = false; 
- 				aud.mozPreservesPitch = false; 
- 				aud.webkitPreservesPitch = false; 
-
- 				aud.addEventListener('play', () => { 
- 					ppBtn.innerHTML = feather.icons.pause.toSvg({ class: 'w-6 h-6' }); 
- 					if(ctx && ctx.state === 'suspended') { 
- 						 ctx.resume(); 
- 					} 
- 					animationLoop(); 
- 				}); 
- 				aud.addEventListener('pause', () => { 
- 					ppBtn.innerHTML = feather.icons.play.toSvg({ class: 'w-6 h-6' }); 
- 					cancelAnimationFrame(animFrameId); 
- 					pfp.style.transform = 'scale(1)'; 
- 					if(vizCtx) vizCtx.clearRect(0, 0, vizCanvas.width, vizCanvas.height); 
- 				}); 
-
- 				aud.addEventListener('ended', nextTrack); 
-
- 				aud.addEventListener('loadedmetadata', () => { 
- 					totalTimeEl.textContent = fmtTime(aud.duration); 
- 					timeline.max = aud.duration; 
- 					const prog = (aud.currentTime / aud.duration) * 100; 
- 					timeline.style.setProperty('--track-progress', `${prog}%`); 
- 				}); 
-
- 				aud.addEventListener('timeupdate', () => { 
- 					currTimeEl.textContent = fmtTime(aud.currentTime); 
- 					timeline.value = aud.currentTime; 
- 					const prog = (aud.currentTime / aud.duration) * 100 || 0; 
- 					timeline.style.setProperty('--track-progress', `${prog}%`); 
- 				}); 
- 				
- 				aud.addEventListener('volumechange', () => { 
- 					updVolIcon(); 
- 					if (!aud.muted) { 
- 						 volSldr.value = aud.volume * 100; 
- 					} 
- 					volSldr.style.setProperty('--track-progress', `${volSldr.value}%`); 
- 				}); 
-
- 				timeline.addEventListener('input', () => { 
- 					aud.currentTime = timeline.value; 
- 				}); 
- 				
- 				volSldr.addEventListener('input', () => { 
- 					if (aud.muted) aud.muted = false; 
- 					aud.volume = volSldr.value / 100; 
- 					localStorage.setItem('demoday_volume', aud.volume); 
- 				}); 
- 				
- 				volBtn.addEventListener('click', () => { 
- 					aud.muted = !aud.muted; 
- 				}); 
-
- 				speedSldr.addEventListener('input', () => { 
- 					const speed = parseFloat(speedSldr.value); 
- 					aud.playbackRate = speed; 
- 					speedValEl.textContent = `${speed.toFixed(2)}x`; 
- 					localStorage.setItem('demoday_speed', speed); 
- 				}); 
-
- 				ppBtn.addEventListener('click', togglePlay); 
- 				prevBtn.addEventListener('click', prevTrack); 
- 				nextBtn.addEventListener('click', nextTrack); 
- 			} 
- 			
- 			// --- Event Listeners --- 
- 			function setupEvents() { 
- 				langBtn.addEventListener('click', (e) => { 
- 					e.stopPropagation(); 
- 					langDD.classList.toggle('hidden'); 
- 				}); 
- 				document.querySelectorAll('.lang-option').forEach(opt => { 
- 					opt.addEventListener('click', (e) => { 
- 						e.preventDefault(); 
- 						updateLang(opt.dataset.lang); 
- 					}); 
- 				}); 
- 				document.addEventListener('click', () => { 
- 					if (!langDD.classList.contains('hidden')) { 
- 						langDD.classList.add('hidden'); 
- 					} 
- 				}); 
- 				mainLinks.forEach((link) => { 
- 					link.addEventListener('click', (e) => { 
- 						e.preventDefault(); 
- 						const newHash = link.getAttribute('href'); 
- 						const mainTgt = newHash.substring(1); 
- 						
- 						try { 
- 							if (window.location.hash !== newHash) { 
- 								history.pushState({ target: mainTgt }, '', newHash); 
- 							} 
- 						} catch (error) { 
- 							console.warn("Could not update URL hash. Running in a sandboxed environment.", error); 
- 						} 
- 						
- 						const subTgt = mainTgt === 'portfolio' ? folioLinks[activeFolioIdx].dataset.target : null; 
- 						updateView(mainTgt, subTgt); 
- 					}); 
- 				}); 
- 				folioLinks.forEach((link) => { 
- 					link.addEventListener('click', (e) => { 
- 						e.preventDefault(); 
- 						updateView('portfolio', link.dataset.target); 
- 					}); 
- 				}); 
- 				window.addEventListener('popstate', () => { 
- 					const hash = window.location.hash || '#home'; 
- 					updateView(hash.substring(1)); 
- 				}); 
- 				window.addEventListener('resize', () => { 
- 					updateMainHeight(); 
- 					if (vizCanvas) { 
- 						vizCanvas.width = vizCanvas.offsetWidth; 
- 						vizCanvas.height = vizCanvas.offsetHeight; 
- 					} 
- 				}); 
- 			} 
-
- 			// --- Initial Page Setup --- 
- 			function init() { 
- 				// 1. Set language 
- 				const savedLang = localStorage.getItem('demoday_lang'); 
- 				updateLang(savedLang || (translations.hasOwnProperty((navigator.language || navigator.userLanguage).split('-')[0]) ? (navigator.language || navigator.userLanguage).split('-')[0] : 'en')); 
-
- 				// 2. Set initial slide positions 
- 				const initialHash = window.location.hash || '#home'; 
- 				updateView(initialHash.substring(1)); 
- 				
- 				mainPanes.forEach(p => { 
- 					if (p.id !== initialHash.substring(1)) { 
- 						p.classList.add('slide-off-right'); 
- 					} 
- 				}); 
- 				folioPanes.forEach((p, i) => p.classList.add(i === 0 ? 'slide-active' : 'slide-off-right')); 
- 				folioLinks[0].classList.add('active'); 
-
- 				// 3. Setup features 
- 				setupTooltips(); 
- 				setupMP(); 
- 				setupEvents(); 
- 				setupParallax(); 
- 				VanillaTilt.init(document.querySelectorAll(".tilt-card"), { 
- 					max: 10, 
- 					speed: 400, 
- 					glare: true, 
- 					"max-glare": 0.2 
- 				}); 
- 				
- 				// 4. Set canvas size 
- 				vizCanvas.width = vizCanvas.offsetWidth; 
- 				vizCanvas.height = vizCanvas.offsetHeight; 
-
- 				// 5. Load initial data 
- 				const savedVolume = localStorage.getItem('demoday_volume'); 
- 				if (savedVolume) { 
- 					aud.volume = parseFloat(savedVolume); 
- 					volSldr.value = aud.volume * 100; 
- 				} 
- 				const savedSpeed = localStorage.getItem('demoday_speed'); 
- 				if (savedSpeed) { 
- 					speedSldr.value = savedSpeed; 
- 					speedValEl.textContent = `${parseFloat(savedSpeed).toFixed(2)}x`; 
- 				} 
-
- 				loadTrack(currentTrackIndex); 
- 				volSldr.style.setProperty('--track-progress', `${volSldr.value}%`); 
- 				
- 				// 6. Initial animations and height calculation 
- 				setTimeout(() => { 
- 					animateEls('#pfp, #bio, .flag-container, .social-card, #badges > div'); 
- 					feather.replace(); 
- 					updVolIcon(); 
- 					requestAnimationFrame(updateMainHeight); 
- 					
- 					// Attempt to autoplay 
-function togglePlay() {
-    setupAudioContext();
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeyRon</title>
     
-    if (isPlaying || ctx.state === 'suspended') {
-        aud.pause();
-        isPlaying = false;
-        ppBtn.innerHTML = feather.icons.play.toSvg({ class: 'w-6 h-6' });
-        return;
-    }
+    <!-- Embed/Social Sharing Tags -->
+    <meta name="description" content="15 y/o developer, photographer and video editor from Russia. I create Roblox games and web projects.">
+    <meta name="theme-color" content="#000000">
 
-    const playPromise = aud.play();
+    <!-- Open Graph (Discord, Facebook, etc.) -->
+    <meta property="og:title" content="NeyRon">
+    <meta property="og:description" content="15 y/o developer, photographer and video editor from Russia. I create Roblox games and web projects.">
+    <meta property="og:image" content="public/bg.png">
+    <meta property="og:type" content="website">
     
-    if (playPromise !== undefined) {
-        playPromise.then(() => {
-            isPlaying = true;
-            ppBtn.innerHTML = feather.icons.pause.toSvg({ class: 'w-6 h-6' });
-            animationLoop();
-        }).catch(e => {
-            console.error("Ошибка воспроизведения:", e);
-            isPlaying = false;
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NeyRon">
+    <meta name="twitter:description" content="15 y/o developer, photographer and video editor from Russia. I create Roblox games and web projects.">
+    <meta name="twitter:image" content="public/bg.png">
 
-            ppBtn.innerHTML = feather.icons.play.toSvg({ class: 'w-6 h-6' });
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- Vanilla Tilt JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.0/dist/vanilla-tilt.min.js"></script>
+
+    <style>
+        /* Base Styling */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Background Container With Blurred Image */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            background-image: url('public/bg.png');
+            filter: blur(24px) brightness(0.6);
+            transform: scale(1.1);
+            transition: transform 0.2s linear;
+        }
+
+        /* Custom Active States For Navigation */
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        
+        .sub-nav-link.active {
+             background-color: rgba(255, 255, 255, 0.2);
+             border-color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Styles For Tab Transitions */
+        .content-section, .portfolio-content {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+        
+        /* State Classes For Sliding Panels */
+        .slide-active {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 10;
+        }
+        .slide-off-left {
+            transform: translateX(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        .slide-off-right {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* --- Tooltip Styles --- */
+        .tooltip {
+            position: fixed;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(4px);
+            color: #e5e7eb;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            padding: 0;
+        }
+        #flag-tooltip {
+            width: 220px;
+            overflow: hidden;
+            transform: translate(-50%, calc(-100% + 10px)) scale(0.95);
+        }
+        #flag-tooltip.below {
+            transform: translate(-50%, 10px) scale(0.95);
+        }
+        #flag-tooltip.visible {
+            opacity: 1;
+            transform: translate(-50%, calc(-100% - 8px)) scale(1);
+        }
+        #flag-tooltip.below.visible {
+            transform: translate(-50%, 8px) scale(1);
+        }
+        .tooltip-flag {
+            width: 100%;
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+        }
+        .tooltip-text {
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        #pronoun-tooltip {
+            padding: 0.75rem;
+            width: max-content;
+            max-width: 300px;
+            line-height: 1.5;
+            text-align: left;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease;
+        }
+        #pronoun-tooltip.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Pride Flag Base Styles */
+        .pride-flag {
+            display: inline-block;
+            width: 48px;
+            height: 28px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+        .flag-container:hover .pride-flag {
+            transform: scale(1.1);
+        }
+        /* Flag gradients */
+        .flag-gay {
+            background: linear-gradient(to bottom, 
+             #078D70 0%, #078D70 14.28%, 
+             #26CEAA 14.28%, #26CEAA 28.56%, 
+             #98E8C1 28.56%, #98E8C1 42.84%, 
+             #FFFFFF 42.84%, #FFFFFF 57.12%, 
+             #7BADE2 57.12%, #7BADE2 71.4%, 
+             #5049CB 71.4%, #5049CB 85.68%, 
+             #3D1A78 85.68%, #3D1A78 100%);
+        }
+        .flag-nonbinary { background: linear-gradient(to bottom, #FCF434 25%, #FFFFFF 25% 50%, #9C59D1 50% 75%, #2C2C2C 75%); }
+        .flag-trans { background: linear-gradient(to bottom, #5BCEFA 20%, #F5A9B8 20% 40%, #FFFFFF 40% 60%, #F5A9B8 60% 80%, #5BCEFA 80%); }
+        
+        /* Language Switcher Flag Styles */
+        .lang-flag {
+            width: 24px;
+            height: 16px;
+            border-radius: 2px;
+            background-size: cover;
+            box-shadow: 0 0 1px rgba(0,0,0,0.5);
+        }
+
+        /* --- Music Player Styles --- */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+            width: 100%;
+            /* Custom CSS variable for progress trail */
+            --track-progress: 0%;
+        }
+        /* Track */
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, #67e8f9 var(--track-progress), rgba(255, 255, 255, 0.2) var(--track-progress));
+            height: 4px;
+            border-radius: 2px;
+        }
+        input[type="range"]::-moz-range-track {
+            background: linear-gradient(to right, #67e8f9 var(--track-progress), rgba(255, 255, 255, 0.2) var(--track-progress));
+            height: 4px;
+            border-radius: 2px;
+        }
+        /* Thumb */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            margin-top: -4px;
+            background-color: #fff;
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            transition: transform 0.1s ease-in-out;
+        }
+        input[type="range"]::-moz-range-thumb {
+            border: none;
+            background-color: #fff;
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            transition: transform 0.1s ease-in-out;
+        }
+         input[type="range"]:hover::-webkit-slider-thumb {
+            transform: scale(1.2);
+        }
+        input[type="range"]:hover::-moz-range-thumb {
+            transform: scale(1.2);
+        }
+
+        main {
+            transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #pfp {
+            transition: transform 0.1s linear;
+        }
+
+        /* Visualizer Canvas */
+        #visualizer-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        /* 3D Tilt container */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+        }
+        
+        /* Tilt card fixes */
+        .social-card {
+            transition: background-color 0.2s ease-in-out;
+        }
+        .social-card:hover i {
+            color: #fff;
+        }
+
+        /* --- Character Image Styles --- */
+        @keyframes paper-flutter-light {
+            0%, 100% {
+                transform: rotateZ(-1deg) skewX(0) skewY(0);
+                filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4)) brightness(1.0);
+            }
+            25% {
+                transform: rotateZ(1deg) skewX(-2deg) skewY(0deg);
+                filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4)) brightness(1.05);
+            }
+            50% {
+                transform: rotateZ(0deg) skewX(1deg) skewY(1deg);
+                filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4)) brightness(0.98);
+            }
+            75% {
+                transform: rotateZ(-2deg) skewX(0) skewY(-1deg);
+                filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.4)) brightness(1.02);
+            }
+        }
+
+        .character-image {
+            animation: paper-flutter-light 4s steps(1, end) infinite;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .character-image:hover {
+            transform: scale(1.05) !important;
+            animation-play-state: paused;
+        }
+
+        /* Responsive fixes */
+        @media (max-width: 640px) {
+            .music-player-layout {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .music-player-controls {
+                width: 100%;
+            }
+            .music-player-options {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-300 overflow-x-clip">
+
+    <div class="background-container" style="transform: translateX(0px) translateY(0px) scale(1.1);"></div>
+
+    <!-- Language Switcher -->
+    <div id="lang-switcher" class="fixed top-4 right-4 z-50">
+        <button id="lang-button" class="flex items-center space-x-2 bg-black/30 p-2 rounded-full border border-white/10 hover:bg-black/50 transition-colors">
+            <svg class="lang-flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 6">
+                <path fill="#fff" d="M0 0h9v3H0z"></path>
+                <path fill="#d52b1e" d="M0 3h9v3H0z"></path>
+                <path fill="#0039a6" d="M0 2h9v2H0z"></path>
+            </svg>
+        </button>
+        <div id="lang-dropdown" class="absolute top-full right-0 mt-2 w-40 bg-black/70 backdrop-blur-sm border border-white/10 rounded-lg shadow-lg overflow-hidden hidden">
+            <a href="#" class="lang-option flex items-center space-x-3 p-3 hover:bg-white/10 transition-colors" data-lang="en">
+                <svg class="lang-flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30">
+                    <clipPath id="a"><path d="M0 0v30h60V0z"/></clipPath>
+                    <clipPath id="b"><path d="M30 15h30v15zv15h-30zH0z"/></clipPath>
+                    <g clip-path="url(#a)">
+                        <path d="M0 0v30h60V0z" fill="#012169"/>
+                        <path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/>
+                        <path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"/>
+                        <path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/>
+                        <path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/>
+                    </g>
+                </svg>
+                <span class="text-white font-medium text-sm">english</span>
+            </a>
+            <a href="#" class="lang-option flex items-center space-x-3 p-3 hover:bg-white/10 transition-colors" data-lang="ru">
+                <svg class="lang-flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 6">
+                    <path fill="#fff" d="M0 0h9v3H0z"/>
+                    <path fill="#d52b1e" d="M0 3h9v3H0z"/>
+                    <path fill="#0039a6" d="M0 2h9v2H0z"/>
+                </svg>
+                <span class="text-white font-medium text-sm">русский</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Character Image -->
+    <a href="https://t.me/d1np1" target="_blank" rel="noopener noreferrer" class="character-image hidden lg:block absolute top-1/2 -translate-y-1/2 left-[calc(50%+28rem)] w-48 z-20">
+        <img src="public/char.png" alt="Character Art" class="w-full h-auto" onerror="this.onerror=null; this.src='https://placehold.co/192x286/1a1a1a/ffffff?text=Art';">
+    </a>
+    <a href="https://t.me/d1np1" target="_blank" rel="noopener noreferrer" class="character-image lg:hidden fixed bottom-4 right-4 w-28 z-40">
+        <img src="public/char.png" alt="Character Art" class="w-full h-auto" onerror="this.onerror=null; this.src='https://placehold.co/112x168/1a1a1a/ffffff?text=Art';">
+    </a>
+    <!-- End Character Image -->
+
+    <div class="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
+        <!-- Main Content Card -->
+        <div class="w-full max-w-4xl mx-auto bg-black/50 backdrop-blur-lg rounded-2xl shadow-2xl flex flex-col border border-white/10">
+            
+            <header class="p-6 border-b border-white/10 shrink-0">
+                <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                    <h1 class="text-3xl font-bold text-white tracking-wider">NeyRon</h1>
+                    <nav class="flex items-center space-x-2 bg-black/30 p-1 rounded-full border border-white/10">
+                        <a href="#home" class="nav-link px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 active" data-translate-key="nav.home">главная</a>
+                        <a href="#portfolio" class="nav-link px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200" data-translate-key="nav.portfolio">портфолио</a>
+                    </nav>
+                </div>
+            </header>
+
+            <main class="relative flex-grow overflow-x-hidden" style="min-height: 500px;">
+                <section id="home" class="content-section p-8 slide-active">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-8">
+                        <img id="pfp" src="public/neyron.png" alt="pfp" class="w-32 h-32 rounded-full border-2 border-white/20 object-cover shadow-lg shrink-0 transition-all duration-500 ease-out" onerror="this.onerror=null; this.src='https://placehold.co/128x128/1a1a1a/ffffff?text=User';">
+                        <div class="flex-grow flex flex-col sm:flex-row justify-between items-center sm:items-start w-full">
+                            <div id="bio" class="text-center sm:text-left transition-all duration-500 ease-out delay-100">
+                                <h2 class="text-2xl font-bold text-white" data-translate-key="bio.name">нейрон</h2>
+                                <div class="flex items-center justify-center sm:justify-start mb-3">
+                                    <p class="text-cyan-400 font-medium" data-translate-key="bio.pronouns">он/его</p>
+                                    <button id="pronoun-info-btn" class="ml-2 text-gray-400 hover:text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info w-4 h-4"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                    </button>
+                                </div>
+                                <p class="text-gray-300 leading-relaxed max-w-md mb-3" data-translate-key="bio.description">15-летний разработчик, фотограф и видеооператор из России. Создаю игры в Roblox и занимаюсь веб-разработкой. Также увлекаюсь монтажом видео.</p>
+                                <!-- Badges Container -->
+                                <div id="badges" class="flex flex-wrap gap-2 justify-center sm:justify-start">
+                                    <div class="flex items-center space-x-1.5 bg-orange-400/10 border border-orange-400/20 rounded-md px-2 py-1 delay-[450ms]">
+                                        <div class="w-4 h-4 rounded overflow-hidden shrink-0">
+                                            <img src="public/pfp.png" class="w-full h-full object-cover" alt="Roblox Developer">
+                                        </div>
+                                        <span class="text-xs font-semibold text-orange-300">Roblox Developer</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Pride Flags Container -->
+                            <div id="flags" class="flex shrink-0 gap-3 mt-4 sm:mt-0 sm:ml-4">
+                                <div class="flag-container relative delay-200" data-description-en="&lt;b class='text-white'&gt;Developer:&lt;/b&gt; I create games and web projects." data-description-ru="&lt;b class='text-white'&gt;Разработчик:&lt;/b&gt; Создаю игры и веб-проекты.">
+                                    <div class="pride-flag flag-gay"></div>
+                                </div>
+                                <div class="flag-container relative delay-300" data-description-en="&lt;b class='text-white'&gt;Photographer:&lt;/b&gt; I take professional photos." data-description-ru="&lt;b class='text-white'&gt;Фотограф:&lt;/b&gt; Делаю профессиональные фотосессии.">
+                                    <div class="pride-flag flag-nonbinary"></div>
+                                </div>
+                                <div class="flag-container relative delay-[400ms]" data-description-en="&lt;b class='text-white'&gt;Video Editor:&lt;/b&gt; I edit videos and create content." data-description-ru="&lt;b class='text-white'&gt;Видеомонтажер:&lt;/b&gt; Монтирую видео и создаю контент.">
+                                    <div class="pride-flag flag-trans"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-4 border-t border-white/10 pt-6" data-translate-key="socials.title">Соц.Сети</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <a href="https://github.com/dimkabrk" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github w-6 h-6 mr-4 text-gray-400">
+                                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-white">github</h3>
+                                <p class="text-sm text-gray-400">@dimkabrk</p>
+                            </div>
+                        </a>
+                        <a href="https://t.me/neyronw" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[600ms]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send w-6 h-6 mr-4 text-gray-400">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-white" data-translate-key="socials.telegramchannel">канал в телеграме</h3>
+                                <p class="text-sm text-gray-400">@neyronw</p>
+                            </div>
+                        </a>
+                        <a href="https://www.roblox.com/users/1676221850/profile" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[700ms]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-box w-6 h-6 mr-4 text-gray-400">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-white" data-translate-key="socials.roblox">роблокс</h3>
+                                <p class="text-sm text-gray-400">@Reset40853830</p>
+                            </div>
+                        </a>
+                        <a href="https://discord.gg/KzSbDzWb" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[700ms]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-headphones w-6 h-6 mr-4 text-gray-400">
+                                <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-white" data-translate-key="socials.discord">дискорд</h3>
+                                <p class="text-sm text-gray-400">dimabratskii</p>
+                            </div>
+                        </a>
+                        <a href="mailto:brkdima7@gmail.com" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[700ms]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-at-sign w-6 h-6 mr-4 text-gray-400">
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-white" data-translate-key="socials.email">почта</h3>
+                                <p class="text-sm text-gray-400">brkdima7@gmail.com</p>
+                            </div>
+                        </a>
+                        <a href="https://t.me/xerlysup_bot" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[700ms]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send w-6 h-6 mr-4 text-gray-400">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-white">Telegram Bot</h3>
+                                <p class="text-sm text-gray-400">@xerlysup_bot</p>
+                            </div>
+                        </a>
+                        <a href="https://neystars.ru" target="_blank" class="social-card tilt-card flex items-center p-4 bg-white/5 hover:bg-white/10 rounded-lg delay-[700ms]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star w-6 h-6 mr-4 text-gray-400">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-white">NeyStars</h3>
+                                <p class="text-sm text-gray-400">neystars.ru</p>
+                            </div>
+                        </a>
+                    </div>
+                </section>
+
+                <section id="portfolio" class="content-section p-8 slide-off-right">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-white mb-4 md:mb-0" data-translate-key="portfolio.title">портфолио</h2>
+                         <div id="portfolio-nav" class="flex items-center space-x-2 border border-white/10 rounded-full p-1 bg-black/20">
+                             <button data-target="coding" class="sub-nav-link px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 border border-transparent active" data-translate-key="portfolio.coding">кодинг</button>
+                             <button data-target="projects" class="sub-nav-link px-4 py-1.5 rounded-full text-sm font-medium transition-colors duration-200 border border-transparent" data-translate-key="portfolio.projects">проекты</button>
+                         </div>
+                    </div>
+                    <div id="portfolio-content-wrapper" class="relative min-h-[200px] overflow-x-hidden">
+                        
+                        <!-- Pane 1: Coding -->
+                        <div id="coding" class="portfolio-content p-4 slide-active">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-white/5 p-5 rounded-lg border border-white/10 tilt-card">
+                                    <h3 class="font-bold text-lg text-white mb-2">WB Simulator</h3>
+                                    <p class="text-gray-400 text-sm mb-4">Игра в Roblox про симулятор Wildberries. Игроки могут почуствовать себя настоящими работниками ПВЗ.</p>
+                                    <div class="flex items-center space-x-4">
+                                        <a href="https://www.roblox.com/games/???/" class="text-sm text-cyan-400 hover:text-cyan-300" data-translate-key="portfolio.link.playgame">играть</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pane 2: Projects -->
+                        <div id="projects" class="portfolio-content p-4 slide-off-right">
+                             <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10 tilt-card">
+                                    <div>
+                                        <h3 class="font-semibold text-white">NeyStars</h3>
+                                        <p class="text-sm text-gray-400">Сервис для покупки Telegram Stars</p>
+                                    </div>
+                                    <a href="https://neystars.ru" class="bg-cyan-500/10 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium hover:bg-cyan-500/20" data-translate-key="portfolio.link.visit">посетить</a>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/10 tilt-card">
+                                    <div>
+                                        <h3 class="font-semibold text-white">Вторые</h3>
+                                        <p class="text-sm text-gray-400">Свое молодежное творческое сообщество Вторых</p>
+                                    </div>
+                                    <a href="https://t.me/myvtorie" class="bg-cyan-500/10 text-cyan-300 px-4 py-2 rounded-full text-sm font-medium hover:bg-cyan-500/20" data-translate-key="portfolio.link.visit">посетить</a>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+        
+        <!-- Music Player -->
+        <div id="music-player" class="relative w-full max-w-4xl mx-auto bg-black/50 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-white/10 mt-6 p-4 flex flex-col sm:flex-row items-center gap-4 music-player-layout">
+            <canvas id="visualizer-canvas"></canvas>
+            <!-- Hidden audio element -->
+            <audio id="audio-player" preload="metadata" style="display: none;">
+                <source src="public/music.mp3" type="audio/mpeg">
+                Ваш браузер не поддерживает аудио.
+            </audio>
+            
+            <!-- Track Info -->
+            <div class="w-full sm:w-48 shrink-0 text-center sm:text-left z-10">
+                <p id="track-title" class="text-white font-semibold truncate">Young Black Rich</p>
+                <p id="track-artist" class="text-gray-400 text-sm truncate">Melly Mike</p>
+            </div>
+            
+            <!-- Main Controls -->
+            <div class="flex-grow flex flex-col items-center gap-2 w-full sm:w-auto z-10 music-player-controls">
+                <!-- Control Buttons -->
+                <div class="flex items-center gap-2">
+                    <button id="prev-track-btn" class="p-2 text-gray-400 hover:text-white transition-colors active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-back w-5 h-5">
+                            <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                            <line x1="5" y1="19" x2="5" y2="5"></line>
+                        </svg>
+                    </button>
+                    <button id="play-pause-btn" class="p-2 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play w-6 h-6" id="play-pause-icon">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    </button>
+                    <button id="next-track-btn" class="p-2 text-gray-400 hover:text-white transition-colors active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-skip-forward w-5 h-5">
+                            <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                            <line x1="19" y1="5" x2="19" y2="19"></line>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Timeline -->
+                <div class="flex-grow flex items-center gap-2 w-full">
+                    <span id="current-time" class="text-xs w-10 text-right">0:00</span>
+                    <input id="timeline" type="range" value="0" min="0" max="100" class="w-full">
+                    <span id="total-time" class="text-xs w-10 text-left">0:00</span>
+                </div>
+            </div>
+            
+            <!-- Volume and Options -->
+            <div class="flex items-center gap-2 justify-between sm:justify-end w-full sm:w-56 z-10 music-player-options">
+                <div class="flex flex-col space-y-1 w-full">
+                    <div class="flex items-center gap-2">
+                        <button id="volume-btn" class="p-1 text-gray-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-volume-2 w-5 h-5">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                            </svg>
+                        </button>
+                        <input id="volume-slider" type="range" value="100" min="0" max="100" class="w-full" style="--track-progress: 100%;">
+                    </div>
+                     <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-fast-forward w-5 h-5 text-gray-400">
+                            <polygon points="13 19 22 12 13 5 13 19"></polygon>
+                            <polygon points="2 19 11 12 2 5 2 19"></polygon>
+                        </svg>
+                        <input id="speed-slider" type="range" value="1.1" min="0.5" max="2" step="0.05" class="w-full">
+                        <span id="speed-value" class="text-xs w-10 text-center text-gray-400">1.10x</span>
+                     </div>
+                </div>
+                <a id="track-link" href="https://soundcloud.com/madk1d9/tak-po" target="_blank" class="p-2 text-gray-400 hover:text-white transition-colors active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link w-5 h-5">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tooltips -->
+    <div id="flag-tooltip" class="tooltip"></div>
+    <div id="pronoun-tooltip" class="tooltip"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Translations Object ---
+            const translations = {
+            en: {
+                'nav.home': 'home',
+                'nav.portfolio': 'portfolio',
+                'bio.name': 'neyron',
+                'bio.pronouns': 'he/him',
+                'bio.description': '15 y/o developer, photographer and video editor from Russia. I create Roblox games and web projects.',
+                'pronoun.tooltip': "<b>he/him:</b><br>i think <b>he</b> is very nice.<br>i met <b>him</b> recently.<br>is this <b>his</b> dog?<br><b>he</b> told me that the house is <b>his</b>.",
+                'socials.title': 'socials',
+                'socials.twitter': 'twitter / x',
+                'socials.telegramchannel': 'telegram channel',
+                'socials.telegram': 'telegram',
+                'socials.roblox': 'roblox',
+                'socials.discord': 'discord',
+                'socials.email': 'email',
+                'portfolio.title': 'portfolio',
+                'portfolio.coding': 'coding',
+                'portfolio.projects': 'projects',
+                'portfolio.link.visit': 'visit',
+                'portfolio.link.original': 'original',
+                'portfolio.link.playgame': 'play',
+                'portfolio.link.listen': 'listen',
+            },
+            ru: {
+                'nav.home': 'главная',
+                'nav.portfolio': 'портфолио',
+                'bio.name': 'нейрон',
+                'bio.pronouns': 'он/его',
+                'bio.description': '15-летний разработчик, фотограф и видеооператор из России. Создаю игры в Roblox и занимаюсь веб-разработкой. Также увлекаюсь монтажом видео.',
+                'pronoun.tooltip': "<b>он/его:</b><br>я слышал, что <b>он</b> замечательно танцует.<br>я <b>его</b> сегодня ещё не видела.<br>дай <b>ему</b> время.<br>не нужно <b>его</b> осуждать.<br>я горжусь <b>им</b>.<br>расскажи мне о <b>нём</b>!<br>тебе стоит познакомиться с <b>ним</b>.<br>у <b>него</b> есть кот.<br><b>он</b> очень талантлив.<br><b>он</b> замечательный.",
+                'socials.title': 'соцсети',
+                'socials.twitter': 'twitter / x',
+                'socials.telegramchannel': 'канал в телеграме',
+                'socials.telegram': 'телеграм',
+                'socials.roblox': 'роблокс',
+                'socials.discord': 'дискорд',
+                'socials.email': 'почта',
+                'portfolio.title': 'портфолио',
+                'portfolio.coding': 'кодинг',
+                'portfolio.projects': 'проекты',
+                'portfolio.link.visit': 'посетить',
+                'portfolio.link.original': 'оригинал',
+                'portfolio.link.playgame': 'играть',
+                'portfolio.link.listen': 'слушать',
+            }
+            };
+            
+            // --- Playlist Configuration ---
+              const playlist = [
+                   { title: "Young Black Rich", artist: "Melly Mike", src: "public/music.mp3", link: "https://soundcloud.com/mellymike/young-black-rich" },
+                ];
+            
+            let currentTrackIndex = 0;
+            let currentLang;
+
+            // --- Element Caching ---
+            const pfp = document.getElementById('pfp');
+            const bgContainer = document.querySelector('.background-container');
+            const langBtn = document.getElementById('lang-button');
+            const langDD = document.getElementById('lang-dropdown');
+            const mainLinks = Array.from(document.querySelectorAll('header .nav-link'));
+            const mainPanes = Array.from(document.querySelectorAll('main > .content-section'));
+            const folioLinks = Array.from(document.querySelectorAll('#portfolio-nav .sub-nav-link'));
+            const folioPanes = Array.from(document.querySelectorAll('#portfolio-content-wrapper .portfolio-content'));
+            const mainEl = document.querySelector('main');
+            const flagTooltip = document.getElementById('flag-tooltip');
+            const pronounTooltip = document.getElementById('pronoun-tooltip');
+            const flagConts = document.querySelectorAll('.flag-container');
+            const pronounInfoBtn = document.getElementById('pronoun-info-btn');
+            const aud = document.getElementById('audio-player');
+            const ppBtn = document.getElementById('play-pause-btn');
+            const prevBtn = document.getElementById('prev-track-btn');
+            const nextBtn = document.getElementById('next-track-btn');
+            const timeline = document.getElementById('timeline');
+            const currTimeEl = document.getElementById('current-time');
+            const totalTimeEl = document.getElementById('total-time');
+            const volSldr = document.getElementById('volume-slider');
+            const volBtn = document.getElementById('volume-btn');
+            const speedSldr = document.getElementById('speed-slider');
+            const speedValEl = document.getElementById('speed-value');
+            const trackTitleEl = document.getElementById('track-title');
+            const trackArtistEl = document.getElementById('track-artist');
+            const trackLink = document.getElementById('track-link');
+            const vizCanvas = document.getElementById('visualizer-canvas');
+            
+            // --- State ---
+            let activeMainIdx = 0;
+            let activeFolioIdx = 0;
+            let isPlaying = false;
+
+            // --- Web Audio API variables ---
+            let ctx;
+            let anlyzr;
+            let srcNode;
+            let dataArray;
+            let animFrameId;
+            let audioContextSetup = false;
+            let vizCtx;
+            
+            // --- Language Management ---
+            function updateLang(lang) {
+                currentLang = lang;
+                localStorage.setItem('demoday_lang', lang);
+                document.querySelectorAll('[data-translate-key]').forEach(el => {
+                    const key = el.dataset.translateKey;
+                    if (translations[lang] && translations[lang][key]) {
+                        el.innerHTML = translations[lang][key];
+                    }
+                });
+
+                const selOpt = document.querySelector(`.lang-option[data-lang="${lang}"]`);
+                if (selOpt) {
+                    langBtn.innerHTML = selOpt.querySelector('.lang-flag').outerHTML;
+                }
+                langDD.classList.add('hidden');
+                
+                // --- FIX: Recalculate height after text content changes ---
+                setTimeout(() => {
+                    requestAnimationFrame(updateMainHeight);
+                }, 50); // A small delay ensures the browser has reflowed the content
+            }
+            
+            // --- Animations ---
+            const animateEls = (sel) => {
+                document.querySelectorAll(sel).forEach(el => {
+                    el.classList.remove('opacity-0', 'translate-y-4');
+                });
+            };
+            
+            // --- Navigation and View Management ---
+            function handleSlide(panes, newIdx, activeIdx) {
+                if (newIdx === activeIdx) return;
+                const dir = newIdx > activeIdx ? 'right-to-left' : 'left-to-right';
+                const currPane = panes[activeIdx];
+                const newPane = panes[newIdx];
+                if (currPane) {
+                    currPane.classList.remove('slide-active');
+                    currPane.classList.add(dir === 'right-to-left' ? 'slide-off-left' : 'slide-off-right');
+                }
+                if (newPane) {
+                    newPane.classList.remove('slide-off-left', 'slide-off-right');
+                    newPane.classList.add('slide-active');
+                }
+            }
+            
+            // --- Height Calculation ---
+            function updateMainHeight() {
+                const activeMainPane = mainPanes[activeMainIdx];
+                if (!activeMainPane) return;
+
+                let reqHeight = 0;
+
+                if (activeMainPane.id === 'home') {
+                    reqHeight = activeMainPane.scrollHeight;
+                }
+                else if (activeMainPane.id === 'portfolio') {
+                    const folioWrap = document.getElementById('portfolio-content-wrapper');
+                    const activeFolioPane = folioPanes[activeFolioIdx];
+
+                    if (folioWrap && activeFolioPane) {
+                        const staticHeight = folioWrap.offsetTop;
+                        const dynamicHeight = activeFolioPane.scrollHeight;
+                        const internalHeight = staticHeight + dynamicHeight;
+                        const folioStyle = window.getComputedStyle(activeMainPane);
+                        const paddingTop = parseFloat(folioStyle.paddingTop);
+                        const paddingBottom = parseFloat(folioStyle.paddingBottom);
+                        reqHeight = internalHeight + paddingTop + paddingBottom;
+                    }
+                }
+
+                if (reqHeight > 0) {
+                    mainEl.style.height = `${reqHeight}px`;
+                }
+            }
+            
+            function updateView(mainTarget, subTarget) {
+                const newMainTarget = mainTarget || 'home';
+                const newMainIdx = mainLinks.findIndex(link => link.getAttribute('href') === `#${newMainTarget}`);
+                
+                if (newMainIdx !== -1 && newMainIdx !== activeMainIdx) {
+                    handleSlide(mainPanes, newMainIdx, activeMainIdx);
+                    activeMainIdx = newMainIdx;
+                    mainLinks.forEach(l => l.classList.remove('active'));
+                    mainLinks[newMainIdx].classList.add('active');
+                }
+                
+                if (newMainTarget === 'portfolio') {
+                    // use provided subtarget, or default to the currently active one, or 'coding'
+                    const newFolioTarget = subTarget || (folioLinks[activeFolioIdx] ? folioLinks[activeFolioIdx].dataset.target : 'coding');
+                    const newFolioIdx = folioLinks.findIndex(link => link.dataset.target === newFolioTarget);
+                    if (newFolioIdx !== -1) {
+                        handleSlide(folioPanes, newFolioIdx, activeFolioIdx);
+                        activeFolioIdx = newFolioIdx;
+                        folioLinks.forEach(l => l.classList.remove('active'));
+                        folioLinks[newFolioIdx].classList.add('active');
+                    }
+                }
+                setTimeout(() => requestAnimationFrame(updateMainHeight), 50);
+            }
+
+            // --- Tooltip Logic ---
+            function setupTooltips() {
+                flagConts.forEach(cont => {
+                    cont.addEventListener('mouseenter', () => {
+                        const desc = cont.getAttribute(`data-description-${currentLang}`);
+                        const flagEl = cont.querySelector('.pride-flag');
+                        if (!desc || !flagTooltip || !flagEl) return;
+                        
+                        const flagStyle = window.getComputedStyle(flagEl).background;
+                        flagTooltip.innerHTML = `<div class="flex flex-col"><div class="tooltip-flag" style="background: ${flagStyle};"></div><div class="tooltip-text">${desc}</div></div>`;
+                        const rect = cont.getBoundingClientRect();
+                        const tooltipHeight = flagTooltip.offsetHeight;
+                        
+                        if (rect.top - tooltipHeight < 10) {
+                            flagTooltip.classList.add('below');
+                            flagTooltip.style.top = `${rect.bottom}px`;
+                        } else {
+                            flagTooltip.classList.remove('below');
+                            flagTooltip.style.top = `${rect.top}px`;
+                        }
+
+                        flagTooltip.style.left = `${rect.left + rect.width / 2}px`;
+                        flagTooltip.classList.add('visible');
+                    });
+
+                    cont.addEventListener('mouseleave', () => {
+                        if (!flagTooltip) return;
+                        flagTooltip.classList.remove('visible', 'below');
+                    });
+                });
+
+                pronounInfoBtn.addEventListener('mouseenter', () => {
+                    const tooltipText = translations[currentLang]['pronoun.tooltip'];
+                    pronounTooltip.innerHTML = tooltipText;
+
+                    const btnRect = pronounInfoBtn.getBoundingClientRect();
+                    const tooltipRect = pronounTooltip.getBoundingClientRect();
+
+                    let top = btnRect.bottom + 10;
+                    let left = btnRect.left + btnRect.width / 2 - tooltipRect.width / 2;
+                    
+                    if (top + tooltipRect.height > window.innerHeight) {
+                        top = btnRect.top - tooltipRect.height - 10;
+                    }
+
+                    if (left < 10) left = 10;
+                    if (left + tooltipRect.width > window.innerWidth) {
+                        left = window.innerWidth - tooltipRect.width - 10;
+                    }
+                    
+                    pronounTooltip.style.top = `${top}px`;
+                    pronounTooltip.style.left = `${left}px`;
+                    pronounTooltip.classList.add('visible');
+                });
+                
+                pronounInfoBtn.addEventListener('mouseleave', () => {
+                    pronounTooltip.classList.remove('visible');
+                });
+            }
+
+            // --- Visualizer & PFP Bounce ---
+            function animationLoop() {
+                animFrameId = requestAnimationFrame(animationLoop);
+                if (!anlyzr) return;
+
+                anlyzr.getByteFrequencyData(dataArray);
+                
+                // PFP Bounce
+                const bass = (dataArray[0] + dataArray[1] + dataArray[2]) / 2;
+                const pfpScale = 1 + (bass / 255) * 0.15;
+                pfp.style.transform = `scale(${pfpScale})`;
+
+                // Bar Visualizer
+                vizCtx.clearRect(0, 0, vizCanvas.width, vizCanvas.height);
+                const barCount = 64;
+                const barWidth = (vizCanvas.width / barCount) * 0.7;
+                const barGap = (vizCanvas.width / barCount) * 0.3;
+                let x = 0;
+
+                for (let i = 0; i < barCount; i++) {
+                    const barHeight = dataArray[i] * 0.3;
+                    
+                    const r = 255;
+                    const g = 255 + (dataArray[i] / 2);
+                    const b = 200 + (dataArray[i] / 2);
+                    vizCtx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.5)`;
+
+                    vizCtx.fillRect(x, vizCanvas.height - barHeight, barWidth, barHeight);
+                    x += barWidth + barGap;
+                }
+            }
+
+            function setupAudioContext() {
+                if (audioContextSetup) return;
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    ctx = new AudioContext();
+                    srcNode = ctx.createMediaElementSource(aud);
+                    anlyzr = ctx.createAnalyser();
+                    srcNode.connect(anlyzr);
+                    anlyzr.connect(ctx.destination);
+                    anlyzr.fftSize = 256;
+                    const bufferLength = anlyzr.frequencyBinCount;
+                    dataArray = new Uint8Array(bufferLength);
+                    
+                    vizCtx = vizCanvas.getContext('2d');
+                    audioContextSetup = true;
+                } catch (e) {
+                    console.error("Web Audio API setup failed:", e);
+                }
+            }
+
+            // --- Parallax Effect ---
+            function setupParallax() {
+                window.addEventListener('mousemove', (e) => {
+                    if (isPlaying) {
+                        const x = (e.clientX - window.innerWidth / 2) / window.innerWidth;
+                        const y = (e.clientY - window.innerHeight / 2) / window.innerHeight;
+                        bgContainer.style.transform = `translateX(${x * -20}px) translateY(${y * -20}px) scale(1.1)`;
+                    } else {
+                        bgContainer.style.transform = `translateX(0) translateY(0) scale(1.1)`;
+                    }
+                });
+            }
+
+            // --- Music Player Logic ---
+            function loadTrack(idx) {
+                currentTrackIndex = idx;
+                const track = playlist[idx];
+                trackTitleEl.textContent = track.title;
+                trackArtistEl.textContent = track.artist;
+                trackLink.href = track.link;
+                aud.src = track.src;
+                aud.load();
+                aud.playbackRate = parseFloat(speedSldr.value);
+                if (isPlaying) {
+                    const playPromise = aud.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(e => {
+                            console.error("Autoplay was prevented:", e);
+                            isPlaying = false;
+                        });
+                    }
+                }
+            }
+
+            function togglePlay() {
+                setupAudioContext();
+                isPlaying = !isPlaying;
+                if (isPlaying) {
+                    aud.play().catch(e => {
+                        console.error("Play error:", e);
+                        isPlaying = false;
+                    });
+                } else {
+                    aud.pause();
+                }
+            }
+            
+            function nextTrack() {
+                currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+                loadTrack(currentTrackIndex);
+            }
+            
+            function prevTrack() {
+                currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+                loadTrack(currentTrackIndex);
+            }
+            
+            function updVolIcon() {
+                let iconName = 'volume-2';
+                if (aud.muted || aud.volume === 0) {
+                    iconName = 'volume-x';
+                } else if (aud.volume < 0.5) {
+                    iconName = 'volume-1';
+                }
+                volBtn.innerHTML = feather.icons[iconName].toSvg({ class: 'w-5 h-5' });
+            }
+
+            const fmtTime = (time) => {
+                if (isNaN(time)) return "0:00";
+                const mins = Math.floor(time / 60);
+                const secs = Math.floor(time % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            };
+            
+            function setupMP() {
+                aud.preservesPitch = false;
+                aud.mozPreservesPitch = false;
+                aud.webkitPreservesPitch = false;
+
+                aud.addEventListener('play', () => {
+                    ppBtn.innerHTML = feather.icons.pause.toSvg({ class: 'w-6 h-6' });
+                    if(ctx && ctx.state === 'suspended') {
+                         ctx.resume();
+                    }
+                    animationLoop();
+                });
+                
+                aud.addEventListener('pause', () => {
+                    ppBtn.innerHTML = feather.icons.play.toSvg({ class: 'w-6 h-6' });
+                    cancelAnimationFrame(animFrameId);
+                    pfp.style.transform = 'scale(1)';
+                    if(vizCtx) vizCtx.clearRect(0, 0, vizCanvas.width, vizCanvas.height);
+                });
+
+                aud.addEventListener('ended', nextTrack);
+
+                aud.addEventListener('loadedmetadata', () => {
+                    totalTimeEl.textContent = fmtTime(aud.duration);
+                    timeline.max = aud.duration;
+                    const prog = (aud.currentTime / aud.duration) * 100;
+                    timeline.style.setProperty('--track-progress', `${prog}%`);
+                });
+
+                aud.addEventListener('timeupdate', () => {
+                    currTimeEl.textContent = fmtTime(aud.currentTime);
+                    timeline.value = aud.currentTime;
+                    const prog = (aud.currentTime / aud.duration) * 100 || 0;
+                    timeline.style.setProperty('--track-progress', `${prog}%`);
+                });
+                
+                aud.addEventListener('volumechange', () => {
+                    updVolIcon();
+                    if (!aud.muted) {
+                         volSldr.value = aud.volume * 100;
+                    }
+                    volSldr.style.setProperty('--track-progress', `${volSldr.value}%`);
+                });
+
+                timeline.addEventListener('input', () => {
+                    aud.currentTime = timeline.value;
+                });
+                
+                volSldr.addEventListener('input', () => {
+                    if (aud.muted) aud.muted = false;
+                    aud.volume = volSldr.value / 100;
+                    localStorage.setItem('demoday_volume', aud.volume);
+                });
+                
+                volBtn.addEventListener('click', () => {
+                    aud.muted = !aud.muted;
+                });
+
+                speedSldr.addEventListener('input', () => {
+                    const speed = parseFloat(speedSldr.value);
+                    aud.playbackRate = speed;
+                    speedValEl.textContent = `${speed.toFixed(2)}x`;
+                    localStorage.setItem('demoday_speed', speed);
+                });
+
+                ppBtn.addEventListener('click', togglePlay);
+                prevBtn.addEventListener('click', prevTrack);
+                nextBtn.addEventListener('click', nextTrack);
+            }
+            
+            // --- Event Listeners ---
+            function setupEvents() {
+                langBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    langDD.classList.toggle('hidden');
+                });
+                document.querySelectorAll('.lang-option').forEach(opt => {
+                    opt.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updateLang(opt.dataset.lang);
+                    });
+                });
+                document.addEventListener('click', () => {
+                    if (!langDD.classList.contains('hidden')) {
+                        langDD.classList.add('hidden');
+                    }
+                });
+                mainLinks.forEach((link) => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const newHash = link.getAttribute('href');
+                        const mainTgt = newHash.substring(1);
+                        
+                        try {
+                            if (window.location.hash !== newHash) {
+                                history.pushState({ target: mainTgt }, '', newHash);
+                            }
+                        } catch (error) {
+                            console.warn("Could not update URL hash. Running in a sandboxed environment.", error);
+                        }
+                        
+                        const subTgt = mainTgt === 'portfolio' ? folioLinks[activeFolioIdx].dataset.target : null;
+                        updateView(mainTgt, subTgt);
+                    });
+                });
+                folioLinks.forEach((link) => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        updateView('portfolio', link.dataset.target);
+                    });
+                });
+                window.addEventListener('popstate', () => {
+                    const hash = window.location.hash || '#home';
+                    updateView(hash.substring(1));
+                });
+                window.addEventListener('resize', () => {
+                    updateMainHeight();
+                    if (vizCanvas) {
+                        vizCanvas.width = vizCanvas.offsetWidth;
+                        vizCanvas.height = vizCanvas.offsetHeight;
+                    }
+                });
+            }
+
+            // --- Initial Page Setup ---
+            function init() {
+                // 1. Set language
+                const savedLang = localStorage.getItem('demoday_lang');
+                updateLang(savedLang || (translations.hasOwnProperty((navigator.language || navigator.userLanguage).split('-')[0]) ? (navigator.language || navigator.userLanguage).split('-')[0] : 'en'));
+
+                // 2. Set initial slide positions
+                const initialHash = window.location.hash || '#home';
+                updateView(initialHash.substring(1));
+                
+                mainPanes.forEach(p => {
+                    if (p.id !== initialHash.substring(1)) {
+                        p.classList.add('slide-off-right');
+                    }
+                });
+                folioPanes.forEach((p, i) => p.classList.add(i === 0 ? 'slide-active' : 'slide-off-right'));
+                folioLinks[0].classList.add('active');
+
+                // 3. Setup features
+                setupTooltips();
+                setupMP();
+                setupEvents();
+                setupParallax();
+                VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
+                    max: 10,
+                    speed: 400,
+                    glare: true,
+                    "max-glare": 0.2
+                });
+                
+                // 4. Set canvas size
+                vizCanvas.width = vizCanvas.offsetWidth;
+                vizCanvas.height = vizCanvas.offsetHeight;
+
+                // 5. Load initial data
+                const savedVolume = localStorage.getItem('demoday_volume');
+                if (savedVolume) {
+                    aud.volume = parseFloat(savedVolume);
+                    volSldr.value = aud.volume * 100;
+                }
+                const savedSpeed = localStorage.getItem('demoday_speed');
+                if (savedSpeed) {
+                    speedSldr.value = savedSpeed;
+                    speedValEl.textContent = `${parseFloat(savedSpeed).toFixed(2)}x`;
+                }
+
+                loadTrack(currentTrackIndex);
+                volSldr.style.setProperty('--track-progress', `${volSldr.value}%`);
+                
+                // 6. Initial animations and height calculation
+                setTimeout(() => {
+                    animateEls('#pfp, #bio, .flag-container, .social-card, #badges > div');
+                    feather.replace();
+                    updVolIcon();
+                    requestAnimationFrame(updateMainHeight);
+                }, 100);
+            }
+            
+            init();
         });
-    }
-}
- 	</script> 
-  
- 
-
-</body></html>
-
-
-
-
+    </script>
+</body>
+</html>
